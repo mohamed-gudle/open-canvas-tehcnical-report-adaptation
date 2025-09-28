@@ -22,6 +22,16 @@ export interface UserInputs {
   scope?: string;
   /** Specific requirements or constraints */
   requirements?: string[];
+  /** Primary objectives or goals the project must achieve */
+  objectives?: string[];
+  /** Major activities or workstreams you already have in mind */
+  keyActivities?: string[];
+  /** Known risks, blockers, or pain points to manage */
+  keyChallenges?: string[];
+  /** How success will be measured or evaluated */
+  successMetrics?: string[];
+  /** Partners or stakeholders that must be involved */
+  keyPartners?: string[];
   /** User preferences for output format */
   outputPreferences?: {
     format?: "pdf" | "markdown" | "docx";
@@ -192,6 +202,31 @@ export const MISSING_DATA_DECISION_TABLE: MissingDataDecision[] = [
   },
 ];
 
+export interface ClarifyingQuestion {
+  /** Identifier for tracking follow-ups */
+  id: string;
+  /** Which user input this question is trying to clarify */
+  field:
+    | keyof UserInputs
+    | "problem_context"
+    | "constraints"
+    | "dependencies";
+  /** Question posed to the user */
+  question: string;
+  /** Why the question matters */
+  rationale: string;
+  /** Whether the graph should block without this information */
+  required: boolean;
+  /** Current resolution status */
+  status: "pending" | "answered" | "assumed";
+  /** Count of how many times it has been asked */
+  timesAsked: number;
+  /** Timestamp of the last time it was asked */
+  lastAskedAt: string;
+  /** Suggested assumption or default if the user cannot provide it */
+  assumptionSuggestion?: string;
+}
+
 /**
  * Extended state annotation for the Concept Note Builder Graph
  */
@@ -242,6 +277,25 @@ export const ConceptNoteGraphAnnotation = Annotation.Root({
       sources: [...(state?.sources || []), ...(update?.sources || [])],
     }),
     default: () => ({ sources: [] }),
+  }),
+
+  clarifyingQuestions: Annotation<ClarifyingQuestion[]>({
+    reducer: (state, update) => {
+      const existing = state ?? [];
+      const incoming = update ?? [];
+      const merged = new Map<string, ClarifyingQuestion>();
+
+      for (const question of existing) {
+        merged.set(question.id, question);
+      }
+
+      for (const question of incoming) {
+        merged.set(question.id, question);
+      }
+
+      return Array.from(merged.values());
+    },
+    default: () => [],
   }),
 
   // Control flow for the concept note builder
