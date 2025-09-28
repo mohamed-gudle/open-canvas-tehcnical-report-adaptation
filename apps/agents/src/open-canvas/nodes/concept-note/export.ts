@@ -1,5 +1,8 @@
 import { LangGraphRunnableConfig } from "@langchain/langgraph";
-import { ConceptNoteGraphState, ConceptNoteGraphReturnType } from "../../concept-note-state.js";
+import {
+  ConceptNoteGraphState,
+  ConceptNoteGraphReturnType,
+} from "../../concept-note-state.js";
 import { AIMessage } from "@langchain/core/messages";
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,30 +16,41 @@ export async function exportNode(
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("📤 Starting Export phase for concept note");
 
-  const { draft, userInputs, derivedData, researchNotes, assumptionsLog, todos, citations } = state;
-  
-  if (!draft) {
+  const {
+    conceptDraft,
+    userInputs,
+    derivedData,
+    researchNotes,
+    assumptionsLog,
+    todos,
+    citations,
+  } = state;
+  void config;
+
+  if (!conceptDraft) {
     return {
       needsUserIntervention: true,
       interventionContext: {
         stage: "export",
         reason: "no_draft_available",
-        prompt: "No draft is available for export. Please complete the drafting process first."
-      }
+        prompt:
+          "No draft is available for export. Please complete the drafting process first.",
+      },
     };
   }
 
   try {
     // Get export preferences
     const outputFormat = userInputs?.outputPreferences?.format || "markdown";
-    const includeVisuals = userInputs?.outputPreferences?.includeVisuals || false;
+    const includeVisuals =
+      userInputs?.outputPreferences?.includeVisuals || false;
     const length = userInputs?.outputPreferences?.length || "standard";
 
     // Generate the final export content
     const exportContent = await generateExportContent(
-      draft, 
-      userInputs, 
-      derivedData, 
+      conceptDraft,
+      userInputs,
+      derivedData,
       researchNotes,
       assumptionsLog,
       todos,
@@ -52,16 +66,23 @@ export async function exportNode(
         {
           index: 1,
           type: "text" as const,
-          title: userInputs?.title ? `Final Concept Note: ${userInputs.title}` : "Final Concept Note",
-          fullMarkdown: exportContent
-        }
-      ]
+          title: userInputs?.title
+            ? `Final Concept Note: ${userInputs.title}`
+            : "Final Concept Note",
+          fullMarkdown: exportContent,
+        },
+      ],
     };
 
     // Generate export completion message with summary
     const exportMessage = new AIMessage({
       id: `export-${uuidv4()}`,
-      content: generateExportMessage(draft, userInputs, outputFormat, includeVisuals)
+      content: generateExportMessage(
+        conceptDraft,
+        userInputs,
+        outputFormat,
+        includeVisuals
+      ),
     });
 
     return {
@@ -69,19 +90,19 @@ export async function exportNode(
       messages: [exportMessage],
       _messages: [exportMessage],
       conceptNoteStage: "completed",
-      needsUserIntervention: false
+      needsUserIntervention: false,
     };
-
   } catch (error) {
     console.error("Export error:", error);
-    
+
     return {
       needsUserIntervention: true,
       interventionContext: {
         stage: "export",
         reason: "export_failed",
-        prompt: "There was an issue during the export process. Please check the draft and try again."
-      }
+        prompt:
+          "There was an issue during the export process. Please check the draft and try again.",
+      },
     };
   }
 }
@@ -97,64 +118,83 @@ async function generateExportContent(
   assumptionsLog?: any,
   todos?: any,
   citations?: any,
-  format: string = "markdown",
-  length: string = "standard"
+  format = "markdown",
+  length = "standard"
 ): Promise<string> {
-  
   const title = userInputs?.title || "Concept Note";
   const date = new Date().toLocaleDateString();
   const author = "Open Canvas Concept Note Builder";
-  
+  const normalizedFormat = format.toLowerCase();
+
   let content = "";
-  
+
   // Header section
   content += generateHeader(title, date, author, draft.version);
-  
+
   // Table of contents (for standard and detailed versions)
   if (length !== "brief") {
     content += generateTableOfContents();
   }
-  
+
   // Main content sections
   content += generateMainContent(draft, length);
-  
+
   // Appendices for detailed version
   if (length === "detailed") {
-    content += generateAppendices(derivedData, researchNotes, assumptionsLog, todos, citations);
+    content += generateAppendices(
+      derivedData,
+      researchNotes,
+      assumptionsLog,
+      todos,
+      citations
+    );
   }
-  
+
   // Footer
   content += generateFooter(date, draft.version);
-  
+
+  if (normalizedFormat !== "markdown") {
+    content += `\n> Export requested in ${format} format. Markdown output provided until native ${format} export is available.`;
+  }
+
   return content;
 }
 
 /**
  * Generate document header
  */
-function generateHeader(title: string, date: string, author: string, version: number): string {
-  return `# ${title}\n\n` +
-         `**Document Version**: ${version}\n` +
-         `**Date**: ${date}\n` +
-         `**Generated by**: ${author}\n\n` +
-         `---\n\n`;
+function generateHeader(
+  title: string,
+  date: string,
+  author: string,
+  version: number
+): string {
+  return (
+    `# ${title}\n\n` +
+    `**Document Version**: ${version}\n` +
+    `**Date**: ${date}\n` +
+    `**Generated by**: ${author}\n\n` +
+    `---\n\n`
+  );
 }
 
 /**
  * Generate table of contents
  */
 function generateTableOfContents(): string {
-  return `## Table of Contents\n\n` +
-         `1. [Executive Summary](#executive-summary)\n` +
-         `2. [Problem Statement](#problem-statement)\n` +
-         `3. [Proposed Solution](#proposed-solution)\n` +
-         `4. [Implementation Plan](#implementation-plan)\n` +
-         `5. [Timeline](#timeline)\n` +
-         `6. [Budget](#budget)\n` +
-         `7. [Risk Management](#risk-management)\n` +
-         `8. [Expected Outcomes](#expected-outcomes)\n` +
-         `9. [Appendices](#appendices)\n\n` +
-         `---\n\n`;
+  return (
+    `## Table of Contents\n\n` +
+    `1. [Executive Summary](#executive-summary)\n` +
+    `2. [Problem Statement](#problem-statement)\n` +
+    `3. [Proposed Solution](#proposed-solution)\n` +
+    `4. [Implementation Plan](#implementation-plan)\n` +
+    `5. [Timeline](#timeline)\n` +
+    `6. [Budget](#budget)\n` +
+    `7. [Risk Management](#risk-management)\n` +
+    `8. [Expected Outcomes](#expected-outcomes)\n` +
+    `9. [Appendices](#appendices)\n\n` +
+    `---\n\n`
+  );
 }
 
 /**
@@ -162,48 +202,48 @@ function generateTableOfContents(): string {
  */
 function generateMainContent(draft: any, length: string): string {
   let content = "";
-  
+
   // Executive Summary
   if (draft.executiveSummary) {
     content += `## Executive Summary\n\n${draft.executiveSummary}\n\n`;
   }
-  
+
   // Problem Statement
   if (draft.problemStatement) {
     content += `## Problem Statement\n\n${draft.problemStatement}\n\n`;
   }
-  
+
   // Proposed Solution
   if (draft.proposedSolution) {
     content += `## Proposed Solution\n\n${draft.proposedSolution}\n\n`;
   }
-  
+
   // Implementation Plan
   if (draft.implementation) {
     content += `## Implementation Plan\n\n${draft.implementation}\n\n`;
   }
-  
+
   // Skip timeline and budget for brief version
   if (length !== "brief") {
     if (draft.timeline) {
       content += `## Timeline\n\n${draft.timeline}\n\n`;
     }
-    
+
     if (draft.budget) {
       content += `## Budget\n\n${draft.budget}\n\n`;
     }
   }
-  
+
   // Risk Management
   if (draft.riskManagement) {
     content += `## Risk Management\n\n${draft.riskManagement}\n\n`;
   }
-  
+
   // Expected Outcomes
   if (draft.expectedOutcomes) {
     content += `## Expected Outcomes\n\n${draft.expectedOutcomes}\n\n`;
   }
-  
+
   return content;
 }
 
@@ -218,7 +258,7 @@ function generateAppendices(
   citations?: any
 ): string {
   let appendices = `---\n\n## Appendices\n\n`;
-  
+
   // Appendix A: Stakeholder Analysis
   if (derivedData?.stakeholders?.length > 0) {
     appendices += `### Appendix A: Stakeholder Analysis\n\n`;
@@ -227,18 +267,18 @@ function generateAppendices(
     });
     appendices += `\n`;
   }
-  
+
   // Appendix B: Risk Register
   if (derivedData?.risks?.length > 0) {
     appendices += `### Appendix B: Detailed Risk Register\n\n`;
     appendices += `| Risk | Impact | Likelihood | Mitigation |\n`;
     appendices += `|------|--------|------------|------------|\n`;
     derivedData.risks.forEach((risk: any) => {
-      appendices += `| ${risk.risk} | ${risk.impact} | ${risk.likelihood} | ${risk.mitigation || 'TBD'} |\n`;
+      appendices += `| ${risk.risk} | ${risk.impact} | ${risk.likelihood} | ${risk.mitigation || "TBD"} |\n`;
     });
     appendices += `\n`;
   }
-  
+
   // Appendix C: Assumptions Log
   if (assumptionsLog?.assumptions?.length > 0) {
     appendices += `### Appendix C: Assumptions Made\n\n`;
@@ -249,20 +289,23 @@ function generateAppendices(
       appendices += `   - Stage: ${assumption.stage}\n\n`;
     });
   }
-  
+
   // Appendix D: Research Sources
-  if (researchNotes?.webFindings?.length > 0 || citations?.sources?.length > 0) {
+  if (
+    researchNotes?.webFindings?.length > 0 ||
+    citations?.sources?.length > 0
+  ) {
     appendices += `### Appendix D: Research Sources\n\n`;
-    
+
     if (researchNotes?.webFindings?.length > 0) {
       appendices += `**Web Research:**\n`;
       researchNotes.webFindings.forEach((finding: any, index: number) => {
-        appendices += `${index + 1}. ${finding.source}${finding.url ? ` - ${finding.url}` : ''}\n`;
+        appendices += `${index + 1}. ${finding.source}${finding.url ? ` - ${finding.url}` : ""}\n`;
         appendices += `   - Reliability: ${finding.reliability}\n`;
         appendices += `   - Content: ${finding.relevantContent.substring(0, 100)}...\n\n`;
       });
     }
-    
+
     if (citations?.sources?.length > 0) {
       appendices += `**Citations:**\n`;
       citations.sources.forEach((citation: any, index: number) => {
@@ -274,21 +317,23 @@ function generateAppendices(
       });
     }
   }
-  
+
   // Appendix E: Action Items
   if (todos?.items?.length > 0) {
     appendices += `### Appendix E: Outstanding Action Items\n\n`;
-    const pendingTodos = todos.items.filter((todo: any) => todo.status === "pending");
-    
+    const pendingTodos = todos.items.filter(
+      (todo: any) => todo.status === "pending"
+    );
+
     if (pendingTodos.length > 0) {
       appendices += `| Priority | Task | Stage | Assigned To |\n`;
       appendices += `|----------|------|-------|-------------|\n`;
       pendingTodos.forEach((todo: any) => {
-        appendices += `| ${todo.priority} | ${todo.task} | ${todo.stage} | ${todo.assignedTo || 'TBD'} |\n`;
+        appendices += `| ${todo.priority} | ${todo.task} | ${todo.stage} | ${todo.assignedTo || "TBD"} |\n`;
       });
     }
   }
-  
+
   return appendices;
 }
 
@@ -296,13 +341,15 @@ function generateAppendices(
  * Generate document footer
  */
 function generateFooter(date: string, version: number): string {
-  return `\n---\n\n` +
-         `**Document Information:**\n` +
-         `- Generated: ${date}\n` +
-         `- Version: ${version}\n` +
-         `- Tool: Open Canvas Guided Concept Note Builder\n` +
-         `- Format: Markdown\n\n` +
-         `*This document was automatically generated using AI-assisted analysis and should be reviewed by subject matter experts before finalization.*\n`;
+  return (
+    `\n---\n\n` +
+    `**Document Information:**\n` +
+    `- Generated: ${date}\n` +
+    `- Version: ${version}\n` +
+    `- Tool: Open Canvas Guided Concept Note Builder\n` +
+    `- Format: Markdown\n\n` +
+    `*This document was automatically generated using AI-assisted analysis and should be reviewed by subject matter experts before finalization.*\n`
+  );
 }
 
 /**
@@ -311,26 +358,27 @@ function generateFooter(date: string, version: number): string {
 function generateExportMessage(
   draft: any,
   userInputs?: any,
-  format: string = "markdown",
-  includeVisuals: boolean = false
+  format= "markdown",
+  includeVisuals = false
 ): string {
   const title = userInputs?.title || "your concept note";
-  const sectionsCount = Object.keys(draft).filter(key => 
-    draft[key] && typeof draft[key] === 'string' && draft[key].length > 0
+  const sectionsCount = Object.keys(draft).filter(
+    (key) =>
+      draft[key] && typeof draft[key] === "string" && draft[key].length > 0
   ).length;
-  
+
   let message = `📤 **Export Complete!**\n\n`;
   message += `✅ Successfully exported "${title}" in ${format.toUpperCase()} format\n\n`;
   message += `**Document Summary:**\n`;
   message += `• **Sections**: ${sectionsCount} completed sections\n`;
   message += `• **Version**: ${draft.version}\n`;
   message += `• **Format**: ${format}\n`;
-  message += `• **Length**: ${userInputs?.outputPreferences?.length || 'standard'}\n`;
-  
+  message += `• **Length**: ${userInputs?.outputPreferences?.length || "standard"}\n`;
+
   if (includeVisuals) {
     message += `• **Visuals**: Included\n`;
   }
-  
+
   message += `\n🎉 **Your concept note is ready!** `;
   message += `The document includes all essential sections with professional formatting. `;
   message += `You can now download, share, or further customize the content as needed.\n\n`;
@@ -338,6 +386,6 @@ function generateExportMessage(
   message += `• Review the final document for any last-minute adjustments\n`;
   message += `• Share with stakeholders for feedback\n`;
   message += `• Use as a foundation for detailed project planning\n`;
-  
+
   return message;
 }

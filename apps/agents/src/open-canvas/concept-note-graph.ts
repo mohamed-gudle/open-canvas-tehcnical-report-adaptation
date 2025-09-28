@@ -1,5 +1,6 @@
-import { StateGraph, START, END, Command, Send } from "@langchain/langgraph";
+import { StateGraph, START, END } from "@langchain/langgraph";
 import { ConceptNoteGraphAnnotation, ConceptNoteGraphState } from "./concept-note-state.js";
+import { HumanMessage } from "@langchain/core/messages";
 import {
   userIntakeNode,
   researchNode,
@@ -51,6 +52,7 @@ function routeConceptNoteFlow(state: ConceptNoteGraphState): string | typeof END
  */
 async function waitForUserNode(state: ConceptNoteGraphState): Promise<Partial<ConceptNoteGraphState>> {
   console.log("⏸️ Waiting for user intervention");
+  void state;
   
   // This node represents a pause point for human-in-the-loop interaction
   // The actual user interaction would be handled by the UI layer
@@ -145,9 +147,10 @@ conceptNoteGraph.name = "Concept Note Builder Graph";
  * Helper function to initialize concept note generation
  */
 export function createConceptNoteInput(userMessage: string, customOptions?: any): Partial<ConceptNoteGraphState> {
+  const initialMessage = new HumanMessage({ content: userMessage });
   return {
-    messages: [{ role: "human", content: userMessage }],
-    _messages: [{ role: "human", content: userMessage }],
+    messages: [initialMessage],
+    _messages: [initialMessage],
     conceptNoteStage: "intake",
     needsUserIntervention: false,
     userInputs: customOptions?.userInputs || {},
@@ -170,8 +173,9 @@ export function resumeConceptNoteGeneration(
 
   // Add user response if provided
   if (userResponse) {
-    updates.messages = [{ role: "human", content: userResponse }];
-    updates._messages = [{ role: "human", content: userResponse }];
+    const responseMessage = new HumanMessage({ content: userResponse });
+    updates.messages = [responseMessage];
+    updates._messages = [responseMessage];
   }
 
   // Update user inputs if provided

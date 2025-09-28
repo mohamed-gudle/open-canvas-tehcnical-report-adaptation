@@ -1,6 +1,6 @@
 import { LangGraphRunnableConfig } from "@langchain/langgraph";
 import { ConceptNoteGraphState, ConceptNoteGraphReturnType, UserInputs } from "../../concept-note-state.js";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import { AIMessage } from "@langchain/core/messages";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -15,6 +15,7 @@ export async function userIntakeNode(
 
   // Extract user input from the latest human message
   const latestHumanMessage = state._messages.find(msg => msg.getType() === "human");
+  void config;
   
   if (!latestHumanMessage) {
     return {

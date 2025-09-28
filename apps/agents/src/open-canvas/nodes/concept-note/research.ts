@@ -168,6 +168,7 @@ async function handleMissingData(state: ConceptNoteGraphState): Promise<{
  * Research best practices (placeholder implementation)
  */
 async function researchBestPractices(description: string, config: LangGraphRunnableConfig): Promise<string[]> {
+  void config;
   // TODO: Implement actual research using web search APIs
   // For now, return placeholder best practices based on keywords
   
@@ -216,13 +217,14 @@ async function researchCaseStudies(title: string, description: string, config: L
   description: string;
   relevantLessons: string[];
 }>> {
+  void config;
   // TODO: Implement actual case study research
   // For now, return placeholder case studies
   
   return [
     {
       title: `Similar Initiative: ${title} Case Study`,
-      description: "A comparable project that achieved significant impact through strategic planning and stakeholder engagement.",
+      description: `A comparable project that achieved significant impact through strategic planning and stakeholder engagement, focusing on themes such as ${description.substring(0, 80)}${description.length > 80 ? '...' : ''}`,
       relevantLessons: [
         "Early stakeholder engagement critical for success",
         "Phased implementation reduces risk",
@@ -245,6 +247,7 @@ async function researchCaseStudies(title: string, description: string, config: L
  * Research compliance requirements (placeholder implementation)
  */
 async function researchCompliance(scope: string, config: LangGraphRunnableConfig): Promise<string[]> {
+  void config;
   // TODO: Implement actual compliance research
   // For now, return placeholder compliance considerations
   

@@ -14,6 +14,7 @@ export async function draftNode(
   console.log("📝 Starting Draft phase for concept note");
 
   const { userInputs, researchNotes, derivedData } = state;
+  void config;
   
   try {
     // Generate each section of the concept note
@@ -26,7 +27,7 @@ export async function draftNode(
       budget: generateBudgetSection(userInputs, derivedData),
       riskManagement: generateRiskManagement(derivedData),
       expectedOutcomes: generateExpectedOutcomes(userInputs, derivedData),
-      version: (state.draft?.version || 0) + 1,
+      version: (state.conceptDraft?.version || 0) + 1,
       lastUpdated: new Date().toISOString()
     };
 
@@ -49,7 +50,7 @@ export async function draftNode(
     });
 
     return {
-      draft: conceptDraft,
+      conceptDraft,
       artifact: {
         currentIndex: 1,
         contents: [
@@ -146,7 +147,7 @@ function generateProposedSolution(userInputs?: any, derivedData?: any, researchN
   
   if (bestPractices.length > 0) {
     solution += "This approach incorporates industry best practices including:\n";
-    bestPractices.slice(0, 3).forEach(practice => {
+    bestPractices.slice(0, 3).forEach((practice: string) => {
       solution += `• ${practice}\n`;
     });
   }
@@ -180,6 +181,14 @@ function generateImplementationPlan(userInputs?: any, derivedData?: any): string
   implementation += "• Optimize processes and address challenges\n";
   implementation += "• Strengthen partnerships and sustainability\n";
   implementation += "• Prepare for project completion and transition\n\n";
+
+  if (userInputs?.requirements?.length) {
+    implementation += "**Key Implementation Considerations:**\n";
+    userInputs.requirements.slice(0, 5).forEach((requirement: string) => {
+      implementation += `• ${requirement}\n`;
+    });
+    implementation += "\n";
+  }
   
   if (resourceNeeds.human?.length > 0) {
     implementation += "**Key Personnel Required:**\n";
@@ -188,10 +197,10 @@ function generateImplementationPlan(userInputs?: any, derivedData?: any): string
     });
     implementation += "\n";
   }
-  
+
   if (stakeholders.length > 0) {
     implementation += "**Stakeholder Engagement:**\n";
-    stakeholders.slice(0, 5).forEach(stakeholder => {
+    stakeholders.slice(0, 5).forEach((stakeholder: string) => {
       implementation += `• ${stakeholder}: Regular communication and involvement in key decisions\n`;
     });
   }
@@ -217,6 +226,14 @@ function generateTimelineSection(userInputs?: any, derivedData?: any): string {
   timeline += "• Timely stakeholder approvals and engagement\n";
   timeline += "• Availability of required resources and personnel\n";
   timeline += "• Resolution of any regulatory or compliance requirements\n";
+  
+  if (derivedData?.stakeholders?.length) {
+    timeline += "• Coordinated sessions with key stakeholders throughout each phase\n";
+  }
+  
+  if (derivedData?.risks?.length) {
+    timeline += "• Risk re-assessment checkpoints aligned with project milestones\n";
+  }
   
   return timeline;
 }
@@ -248,6 +265,13 @@ function generateBudgetSection(userInputs?: any, derivedData?: any): string {
   budget += "**Funding Sources**:\n";
   budget += "• To be identified based on project requirements\n";
   budget += "• May include grants, organizational funding, or partnerships\n";
+
+  if (resourceNeeds.technical?.length) {
+    budget += "\n**Resource Highlights**:\n";
+    resourceNeeds.technical.slice(0, 3).forEach((need: string) => {
+      budget += `• ${need}\n`;
+    });
+  }
   
   return budget;
 }
@@ -298,7 +322,7 @@ function generateExpectedOutcomes(userInputs?: any, derivedData?: any): string {
   
   if (keyThemes.length > 0) {
     outcomes += "**Thematic Outcomes**:\n";
-    keyThemes.forEach(theme => {
+    keyThemes.forEach((theme: string) => {
       outcomes += `• Measurable progress in ${theme.toLowerCase()}\n`;
     });
     outcomes += "\n";
@@ -306,7 +330,7 @@ function generateExpectedOutcomes(userInputs?: any, derivedData?: any): string {
   
   if (successMetrics.length > 0) {
     outcomes += "**Success Metrics**:\n";
-    successMetrics.slice(0, 5).forEach(metric => {
+    successMetrics.slice(0, 5).forEach((metric: string) => {
       outcomes += `• ${metric}\n`;
     });
     outcomes += "\n";
@@ -317,6 +341,14 @@ function generateExpectedOutcomes(userInputs?: any, derivedData?: any): string {
   outcomes += "• Improved capacity and capabilities within the organization\n";
   outcomes += "• Lessons learned and best practices for future initiatives\n";
   outcomes += "• Enhanced partnerships and stakeholder relationships\n";
+
+  if (userInputs?.targetAudience) {
+    outcomes += `• Tangible value delivered to ${userInputs.targetAudience}\n`;
+  }
+
+  if (userInputs?.description) {
+    outcomes += `• Alignment with the stated project focus on ${userInputs.description.substring(0, 80)}${userInputs.description.length > 80 ? '...' : ''}\n`;
+  }
   
   return outcomes;
 }

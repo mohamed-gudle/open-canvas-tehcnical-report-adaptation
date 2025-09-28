@@ -14,6 +14,7 @@ export async function computeNode(
   console.log("⚙️ Starting Compute phase for concept note");
 
   const { userInputs, researchNotes } = state;
+  void config;
   
   // Perform computational analysis and derive key insights
   const derivedData: DerivedData = {};
@@ -115,12 +116,24 @@ function extractKeyThemes(description?: string, researchNotes?: any): string[] {
     themes.push("Economic development", "Financial sustainability");
   }
   
+  if (researchNotes?.webFindings?.length) {
+    const findingsText = researchNotes.webFindings
+      .map((item: any) => item.relevantContent?.toLowerCase?.() || "")
+      .join(" ");
+    if (findingsText.includes("policy")) {
+      themes.push("Policy alignment");
+    }
+    if (findingsText.includes("innovation")) {
+      themes.push("Innovation enablement");
+    }
+  }
+
   // Generic themes if none specific found
   if (themes.length === 0) {
     themes.push("Project implementation", "Stakeholder engagement", "Impact measurement");
   }
   
-  return themes;
+  return [...new Set(themes)];
 }
 
 /**
@@ -134,6 +147,14 @@ function identifyStakeholders(userInputs?: any, researchNotes?: any): string[] {
   
   if (userInputs?.targetAudience) {
     stakeholders.push(userInputs.targetAudience);
+  }
+
+  if (researchNotes?.casStudies?.length) {
+    stakeholders.push("Industry partners", "Subject matter experts");
+  }
+
+  if (researchNotes?.compliance?.length) {
+    stakeholders.push("Regulatory bodies", "Compliance advisors");
   }
   
   // Add stakeholders based on scope
@@ -218,12 +239,30 @@ function assessRisks(userInputs?: any, researchNotes?: any): Array<{
   }
   
   // Regulatory risks
-  risks.push({
-    risk: "Regulatory or compliance challenges",
-    impact: "medium" as const,
-    likelihood: "low" as const,
-    mitigation: "Early engagement with regulatory bodies and compliance review"
-  });
+  if (researchNotes?.compliance?.length) {
+    risks.push({
+      risk: "Regulatory or compliance challenges",
+      impact: "medium" as const,
+      likelihood: "low" as const,
+      mitigation: "Early engagement with regulatory bodies and compliance review"
+    });
+  } else {
+    risks.push({
+      risk: "Regulatory or compliance challenges",
+      impact: "medium" as const,
+      likelihood: "low" as const,
+      mitigation: "Early engagement with regulatory bodies and compliance review"
+    });
+  }
+
+  if (researchNotes?.webFindings?.some((finding: any) => finding.relevantContent?.toLowerCase().includes('supply chain'))) {
+    risks.push({
+      risk: "Supply chain disruptions or vendor delays",
+      impact: "medium" as const,
+      likelihood: "medium" as const,
+      mitigation: "Qualify multiple vendors and maintain contingency inventory"
+    });
+  }
   
   return risks;
 }
@@ -361,6 +400,26 @@ function generateTodoItems(userInputs?: any, derivedData?: DerivedData): Array<{
     status: "pending" as const
   });
   
+  if (derivedData?.risks?.length) {
+    todos.push({
+      id: uuidv4(),
+      task: "Review identified risks with project stakeholders",
+      priority: "medium" as const,
+      stage: "review" as const,
+      status: "pending" as const
+    });
+  }
+
+  if (derivedData?.resourceNeeds?.human?.length) {
+    todos.push({
+      id: uuidv4(),
+      task: "Validate resource assignments for critical roles",
+      priority: "medium" as const,
+      stage: "analysis" as const,
+      status: "pending" as const
+    });
+  }
+
   // Low priority items
   todos.push({
     id: uuidv4(),

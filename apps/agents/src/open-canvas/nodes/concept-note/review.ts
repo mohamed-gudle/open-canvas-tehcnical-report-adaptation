@@ -13,9 +13,10 @@ export async function reviewNode(
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("🔍 Starting Review phase for concept note");
 
-  const { draft, userInputs, derivedData, researchNotes } = state;
+  const { conceptDraft, userInputs, derivedData, researchNotes } = state;
+  void config;
   
-  if (!draft) {
+  if (!conceptDraft) {
     return {
       needsUserIntervention: true,
       interventionContext: {
@@ -28,13 +29,13 @@ export async function reviewNode(
 
   try {
     // Perform comprehensive review
-    const reviewResults = await performQualityReview(draft, userInputs, derivedData, researchNotes);
+    const reviewResults = await performQualityReview(conceptDraft, userInputs, derivedData, researchNotes);
     
     // Generate review todos if issues found
     const reviewTodos: TodoItems = { items: [] };
     
     if (reviewResults.issues.length > 0) {
-      reviewResults.issues.forEach((issue, index) => {
+      reviewResults.issues.forEach(issue => {
         reviewTodos.items.push({
           id: uuidv4(),
           task: `Address review issue: ${issue.description}`,
@@ -66,9 +67,9 @@ export async function reviewNode(
     }
 
     // Create updated draft with review improvements if any
-    let updatedDraft = draft;
+    let updatedDraft = conceptDraft;
     if (reviewResults.improvements.length > 0) {
-      updatedDraft = await applyAutomaticImprovements(draft, reviewResults.improvements);
+      updatedDraft = await applyAutomaticImprovements(conceptDraft, reviewResults.improvements);
     }
 
     // Generate review completion message
@@ -78,7 +79,7 @@ export async function reviewNode(
     });
 
     return {
-      draft: updatedDraft,
+      conceptDraft: updatedDraft,
       todos: reviewTodos,
       messages: [reviewMessage],
       _messages: [reviewMessage],
@@ -285,41 +286,7 @@ function generateReviewMessage(
   }
   
   message += `The concept note is now ready for export in your preferred format.`;
+  message += `\n\n**Draft Version**: ${draft.version} (last updated ${new Date(draft.lastUpdated).toLocaleString()})`;
   
   return message;
-}
-
-/**
- * Generate detailed review report (for future use)
- */
-function generateDetailedReviewReport(
-  reviewResults: { 
-    score: number; 
-    issues: Array<any>; 
-    improvements: Array<any>; 
-    completeness: number; 
-  }
-): string {
-  let report = `# Concept Note Review Report\n\n`;
-  
-  report += `**Overall Quality Score**: ${Math.round(reviewResults.score)}/100\n`;
-  report += `**Completeness**: ${Math.round(reviewResults.completeness)}%\n\n`;
-  
-  if (reviewResults.issues.length > 0) {
-    report += `## Issues Identified\n\n`;
-    reviewResults.issues.forEach((issue, index) => {
-      const severityIcon = issue.severity === "high" ? "🔴" : issue.severity === "medium" ? "🟡" : "🟢";
-      report += `${index + 1}. ${severityIcon} **${issue.section}**: ${issue.description}\n`;
-    });
-    report += `\n`;
-  }
-  
-  if (reviewResults.improvements.length > 0) {
-    report += `## Improvement Recommendations\n\n`;
-    reviewResults.improvements.forEach((improvement, index) => {
-      report += `${index + 1}. **${improvement.section}** (${improvement.type}): ${improvement.description}\n`;
-    });
-  }
-  
-  return report;
 }

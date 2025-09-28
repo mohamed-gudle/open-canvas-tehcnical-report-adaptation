@@ -1,4 +1,4 @@
-import { StateGraph, START, END, Annotation } from "@langchain/langgraph";
+import { Annotation } from "@langchain/langgraph";
 import { OpenCanvasGraphAnnotation } from "./state.js";
 
 /**
@@ -138,7 +138,11 @@ export interface Citations {
  */
 export interface MissingDataDecision {
   missingField: keyof UserInputs;
-  decisionAction: "prompt_user" | "make_assumption" | "skip_section" | "use_default";
+  decisionAction:
+    | "prompt_user"
+    | "make_assumption"
+    | "skip_section"
+    | "use_default";
   defaultValue?: any;
   assumptionReasoning?: string;
   userPrompt?: string;
@@ -150,40 +154,42 @@ export const MISSING_DATA_DECISION_TABLE: MissingDataDecision[] = [
     missingField: "title",
     decisionAction: "prompt_user",
     userPrompt: "Please provide a title for your concept note.",
-    criticalityLevel: "high"
+    criticalityLevel: "high",
   },
   {
-    missingField: "description", 
+    missingField: "description",
     decisionAction: "prompt_user",
     userPrompt: "Please describe your project or initiative in more detail.",
-    criticalityLevel: "high"
+    criticalityLevel: "high",
   },
   {
     missingField: "targetAudience",
     decisionAction: "make_assumption",
     defaultValue: "General stakeholders",
-    assumptionReasoning: "Assuming general stakeholder audience when not specified",
-    criticalityLevel: "medium"
+    assumptionReasoning:
+      "Assuming general stakeholder audience when not specified",
+    criticalityLevel: "medium",
   },
   {
     missingField: "budget",
     decisionAction: "skip_section",
-    criticalityLevel: "medium"
+    criticalityLevel: "medium",
   },
   {
     missingField: "timeline",
-    decisionAction: "make_assumption", 
+    decisionAction: "make_assumption",
     defaultValue: "6-12 months",
-    assumptionReasoning: "Standard project timeline assumption for concept notes",
-    criticalityLevel: "low"
+    assumptionReasoning:
+      "Standard project timeline assumption for concept notes",
+    criticalityLevel: "low",
   },
   {
     missingField: "scope",
     decisionAction: "make_assumption",
     defaultValue: "Local/Regional",
     assumptionReasoning: "Assuming local scope when not specified",
-    criticalityLevel: "low"
-  }
+    criticalityLevel: "low",
+  },
 ];
 
 /**
@@ -192,66 +198,82 @@ export const MISSING_DATA_DECISION_TABLE: MissingDataDecision[] = [
 export const ConceptNoteGraphAnnotation = Annotation.Root({
   // Inherit all base open-canvas state
   ...OpenCanvasGraphAnnotation.spec,
-  
+
   // Concept note specific state channels
   userInputs: Annotation<UserInputs>({
     reducer: (state, update) => ({ ...state, ...update }),
-    default: () => ({})
+    default: () => ({}),
   }),
-  
+
   derivedData: Annotation<DerivedData>({
     reducer: (state, update) => ({ ...state, ...update }),
-    default: () => ({})
+    default: () => ({}),
   }),
-  
+
   assumptionsLog: Annotation<AssumptionsLog>({
     reducer: (state, update) => ({
-      assumptions: [...(state?.assumptions || []), ...(update?.assumptions || [])]
+      assumptions: [
+        ...(state?.assumptions || []),
+        ...(update?.assumptions || []),
+      ],
     }),
-    default: () => ({ assumptions: [] })
+    default: () => ({ assumptions: [] }),
   }),
-  
+
   researchNotes: Annotation<ResearchNotes>({
     reducer: (state, update) => ({ ...state, ...update }),
-    default: () => ({})
+    default: () => ({}),
   }),
-  
-  draft: Annotation<ConceptDraft>({
+
+  conceptDraft: Annotation<ConceptDraft>({
     reducer: (state, update) => ({ ...state, ...update }),
-    default: () => ({ version: 1, lastUpdated: new Date().toISOString() })
+    default: () => ({ version: 1, lastUpdated: new Date().toISOString() }),
   }),
-  
+
   todos: Annotation<TodoItems>({
     reducer: (state, update) => ({
-      items: [...(state?.items || []), ...(update?.items || [])]
+      items: [...(state?.items || []), ...(update?.items || [])],
     }),
-    default: () => ({ items: [] })
+    default: () => ({ items: [] }),
   }),
-  
+
   citations: Annotation<Citations>({
     reducer: (state, update) => ({
-      sources: [...(state?.sources || []), ...(update?.sources || [])]
+      sources: [...(state?.sources || []), ...(update?.sources || [])],
     }),
-    default: () => ({ sources: [] })
+    default: () => ({ sources: [] }),
   }),
 
   // Control flow for the concept note builder
-  conceptNoteStage: Annotation<"intake" | "research" | "compute" | "draft" | "review" | "export" | "completed">({
-    default: () => "intake"
+  conceptNoteStage: Annotation<
+    | "intake"
+    | "research"
+    | "compute"
+    | "draft"
+    | "review"
+    | "export"
+    | "completed"
+  >({
+    reducer: (state, update) => (update ?? state ?? "intake"),
+    default: () => "intake",
   }),
-  
+
   // Flag to indicate if HITL intervention is needed
   needsUserIntervention: Annotation<boolean>({
-    default: () => false
+    reducer: (state, update) => (update ?? state ?? false),
+    default: () => false,
   }),
-  
+
   // Store intervention context
-  interventionContext: Annotation<{
-    stage: string;
-    reason: string;
-    prompt?: string;
-    options?: string[];
-  } | undefined>(),
+  interventionContext: Annotation<
+    | {
+        stage: string;
+        reason: string;
+        prompt?: string;
+        options?: string[];
+      }
+    | undefined
+  >(),
 });
 
 export type ConceptNoteGraphState = typeof ConceptNoteGraphAnnotation.State;
