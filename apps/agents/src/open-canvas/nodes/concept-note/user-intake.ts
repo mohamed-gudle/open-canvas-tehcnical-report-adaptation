@@ -108,7 +108,7 @@ function extractTitle(content: string): string | undefined {
 function extractDescription(content: string): string | undefined {
   // Look for description patterns
   const descPatterns = [
-    /(?:description|about|details?):\s*(.+?)(?:\n\n|$)/is,
+    /(?:description|about|details?):\s*(.+?)(?:\n\n|$)/i,
     /(?:project|initiative)\s+(?:is\s+)?(?:about|involves?)\s+(.+?)(?:\n|\.)/i
   ];
   
@@ -200,11 +200,14 @@ function extractRequirements(content: string): string[] {
   ];
   
   for (const pattern of listPatterns) {
-    const matches = content.matchAll(new RegExp(pattern.source, pattern.flags));
-    for (const match of matches) {
+    let match;
+    const regex = new RegExp(pattern.source, pattern.flags);
+    while ((match = regex.exec(content)) !== null) {
       if (match[1]) {
         requirements.push(match[1].trim());
       }
+      // Prevent infinite loop for global regex
+      if (!pattern.flags.includes('g')) break;
     }
   }
   

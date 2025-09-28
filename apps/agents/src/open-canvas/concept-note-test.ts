@@ -52,10 +52,10 @@ async function testConceptNoteBuilder() {
     console.log(`   - Nodes: ${graphInfo.nodes.length} nodes`);
     console.log(`   - Has interrupts: ${graphInfo.hasInterrupts}`);
     
-    if (conceptNoteGraph.interruptBefore?.length) {
+    if (conceptNoteGraph.interruptBefore && Array.isArray(conceptNoteGraph.interruptBefore)) {
       console.log(`   - Interrupt before: ${conceptNoteGraph.interruptBefore.join(', ')}`);
     }
-    if (conceptNoteGraph.interruptAfter?.length) {
+    if (conceptNoteGraph.interruptAfter && Array.isArray(conceptNoteGraph.interruptAfter)) {
       console.log(`   - Interrupt after: ${conceptNoteGraph.interruptAfter.join(', ')}`);
     }
     
@@ -134,7 +134,7 @@ async function runTests() {
 // Export for use in testing environments
 export { runTests, testConceptNoteBuilder, testStateSchema };
 
-// Run tests if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Run tests if this file is executed directly (Node.js environment check)
+if (typeof process !== 'undefined' && process.argv && process.argv[1] && process.argv[1].endsWith('concept-note-test.ts')) {
   runTests().catch(console.error);
 }

@@ -165,7 +165,13 @@ function identifyStakeholders(userInputs?: any, _researchNotes?: any): string[] 
   }
   
   // Remove duplicates
-  return [...new Set(stakeholders)];
+  const uniqueStakeholders: string[] = [];
+  stakeholders.forEach(stakeholder => {
+    if (uniqueStakeholders.indexOf(stakeholder) === -1) {
+      uniqueStakeholders.push(stakeholder);
+    }
+  });
+  return uniqueStakeholders;
 }
 
 /**
