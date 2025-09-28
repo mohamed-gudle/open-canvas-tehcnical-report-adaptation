@@ -12,6 +12,7 @@ import {
 } from "./documents.js";
 import { getStringFromContent } from ".././../../utils.js";
 import { includeURLContents } from "./include-url-contents.js";
+import { isConceptNoteRequest } from "../concept-note-action.js";
 
 function extractURLsFromLastMessage(messages: BaseMessage[]): string[] {
   const recentMessage = messages[messages.length - 1];
@@ -114,6 +115,20 @@ export async function generatePath(
         ? { messages: newMessages, _messages: newMessages }
         : {}),
     };
+  }
+
+  // Check if this is a concept note generation request
+  const latestMessage = state._messages[state._messages.length - 1];
+  if (latestMessage && latestMessage.getType() === "human") {
+    const messageContent = getStringFromContent(latestMessage.content);
+    if (isConceptNoteRequest(messageContent)) {
+      return {
+        next: "conceptNoteAction",
+        ...(newMessages.length
+          ? { messages: newMessages, _messages: newMessages }
+          : {}),
+      };
+    }
   }
 
   // Check if any URLs are in the latest message. If true, determine if the contents should be included
