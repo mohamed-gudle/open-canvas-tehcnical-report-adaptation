@@ -1,6 +1,5 @@
 import { useGraphContext } from "@/contexts/GraphContext";
 import { useToast } from "@/hooks/use-toast";
-import { ProgrammingLanguageOptions } from "@opencanvas/shared/types";
 import { ThreadPrimitive } from "@assistant-ui/react";
 import { Thread as ThreadType } from "@langchain/langgraph-sdk";
 import { ArrowDownIcon, PanelRightOpen, SquarePen } from "lucide-react";
@@ -17,6 +16,7 @@ import { ThreadWelcome } from "./welcome";
 import { useUserContext } from "@/contexts/UserContext";
 import { useThreadContext } from "@/contexts/ThreadProvider";
 import { useAssistantContext } from "@/contexts/AssistantContext";
+import Image from "next/image";
 
 const ThreadScrollToBottom: FC = () => {
   return (
@@ -35,10 +35,7 @@ const ThreadScrollToBottom: FC = () => {
 export interface ThreadProps {
   userId: string | undefined;
   hasChatStarted: boolean;
-  handleQuickStart: (
-    type: "text" | "code",
-    language?: ProgrammingLanguageOptions
-  ) => void;
+  handleQuickStart: () => void;
   setChatStarted: Dispatch<SetStateAction<boolean>>;
   switchSelectedThreadCallback: (thread: ThreadType) => void;
   searchEnabled: boolean;
@@ -93,11 +90,19 @@ export const Thread: FC<ThreadProps> = (props: ThreadProps) => {
   return (
     <ThreadPrimitive.Root className="flex flex-col h-full w-full">
       <div className="pr-3 pl-6 pt-3 pb-2 flex flex-row gap-4 items-center justify-between">
-        <div className="flex items-center justify-start gap-2 text-gray-600">
+        <div className="flex items-center justify-start gap-3 text-primary">
+          <Image
+            src="/logo-small.svg"
+            alt="AFCEN Logo"
+            width={32}
+            height={32}
+          />
           <ThreadHistory
             switchSelectedThreadCallback={switchSelectedThreadCallback}
           />
-          <TighterText className="text-xl">Open Canvas</TighterText>
+          <TighterText className="text-xl font-semibold">
+            Africa Climate & Energy Nexus
+          </TighterText>
           {!hasChatStarted && (
             <ModelSelector
               modelName={modelName}

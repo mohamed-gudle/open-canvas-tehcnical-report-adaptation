@@ -1,15 +1,11 @@
 import { convertToOpenAIFormat } from "@/lib/convert_messages";
 import { cn } from "@/lib/utils";
-import {
-  ArtifactCodeV3,
-  ArtifactMarkdownV3,
-  ProgrammingLanguageOptions,
-} from "@opencanvas/shared/types";
+import { ArtifactCodeV3, ArtifactMarkdownV3 } from "@opencanvas/shared/types";
 import { EditorView } from "@codemirror/view";
 import { HumanMessage } from "@langchain/core/messages";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ActionsToolbar, CodeToolBar } from "./actions_toolbar";
+import { ActionsToolbar } from "./actions_toolbar";
 import { CodeRenderer } from "./CodeRenderer";
 import { TextRenderer } from "./TextRenderer";
 import { CustomQuickActions } from "./actions_toolbar/custom";
@@ -383,15 +379,6 @@ function ArtifactRendererComponent(props: ArtifactRendererProps) {
         <ActionsToolbar
           streamMessage={streamMessage}
           isTextSelected={isSelectionActive || selectedBlocks !== undefined}
-        />
-      ) : null}
-      {currentArtifactContent.type === "code" ? (
-        <CodeToolBar
-          streamMessage={streamMessage}
-          isTextSelected={isSelectionActive || selectedBlocks !== undefined}
-          language={
-            currentArtifactContent.language as ProgrammingLanguageOptions
-          }
         />
       ) : null}
     </div>

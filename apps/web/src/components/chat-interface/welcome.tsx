@@ -1,10 +1,7 @@
-import { ProgrammingLanguageOptions } from "@opencanvas/shared/types";
 import { ThreadPrimitive, useThreadRuntime } from "@assistant-ui/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FC, useMemo } from "react";
 import { TighterText } from "../ui/header";
 import { NotebookPen } from "lucide-react";
-import { ProgrammingLanguagesDropdown } from "../ui/programming-lang-dropdown";
 import { Button } from "../ui/button";
 
 const QUICK_START_PROMPTS_SEARCH = [
@@ -42,10 +39,7 @@ function getRandomPrompts(prompts: string[], count: number = 4): string[] {
 }
 
 interface QuickStartButtonsProps {
-  handleQuickStart: (
-    type: "text" | "code",
-    language?: ProgrammingLanguageOptions
-  ) => void;
+  handleQuickStart: () => void;
   composer: React.ReactNode;
   searchEnabled: boolean;
 }
@@ -93,10 +87,6 @@ const QuickStartPrompts = ({ searchEnabled }: QuickStartPromptsProps) => {
 };
 
 const QuickStartButtons = (props: QuickStartButtonsProps) => {
-  const handleLanguageSubmit = (language: ProgrammingLanguageOptions) => {
-    props.handleQuickStart("code", language);
-  };
-
   return (
     <div className="flex flex-col gap-8 items-center justify-center w-full">
       <div className="flex flex-col gap-6">
@@ -104,13 +94,12 @@ const QuickStartButtons = (props: QuickStartButtonsProps) => {
         <div className="flex flex-row gap-1 items-center justify-center w-full">
           <Button
             variant="outline"
-            className="text-gray-500 hover:text-gray-700 transition-colors ease-in rounded-2xl flex items-center justify-center gap-2 w-[250px] h-[64px]"
-            onClick={() => props.handleQuickStart("text")}
+            className="text-primary font-medium border-primary/40 hover:border-primary/60 hover:bg-primary/10 transition-colors ease-in rounded-2xl flex items-center justify-center gap-2 w-[250px] h-[64px]"
+            onClick={() => props.handleQuickStart()}
           >
             New Markdown
             <NotebookPen />
           </Button>
-          <ProgrammingLanguagesDropdown handleSubmit={handleLanguageSubmit} />
         </div>
       </div>
       <div className="flex flex-col gap-6 mt-2 w-full">
@@ -123,10 +112,7 @@ const QuickStartButtons = (props: QuickStartButtonsProps) => {
 };
 
 interface ThreadWelcomeProps {
-  handleQuickStart: (
-    type: "text" | "code",
-    language?: ProgrammingLanguageOptions
-  ) => void;
+  handleQuickStart: () => void;
   composer: React.ReactNode;
   searchEnabled: boolean;
 }
@@ -136,14 +122,16 @@ export const ThreadWelcome: FC<ThreadWelcomeProps> = (
 ) => {
   return (
     <ThreadPrimitive.Empty>
-      <div className="flex items-center justify-center mt-16 w-full">
-        <div className="text-center max-w-3xl w-full">
-          <Avatar className="mx-auto">
-            <AvatarImage src="/lc_logo.jpg" alt="LangChain Logo" />
-            <AvatarFallback>LC</AvatarFallback>
-          </Avatar>
-          <TighterText className="mt-4 text-lg font-medium">
-            What would you like to write today?
+      <div className="flex items-center justify-center mt-16 w-full px-4">
+        <div className="text-center max-w-3xl w-full space-y-6">
+          <img
+            src="/logo.svg"
+            alt="Africa Climate and Energy Nexus"
+            className="mx-auto h-20 w-auto"
+            style={{ maxHeight: '80px' }}
+          />
+          <TighterText className="text-sm uppercase text-primary/70 tracking-[0.25em]">
+            Africa Climate & Energy Nexus
           </TighterText>
           <div className="mt-8 w-full">
             <QuickStartButtons
