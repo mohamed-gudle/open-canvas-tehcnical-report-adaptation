@@ -1,10 +1,7 @@
-import { ProgrammingLanguageOptions } from "@opencanvas/shared/types";
 import { ThreadPrimitive, useThreadRuntime } from "@assistant-ui/react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { FC, useMemo } from "react";
 import { TighterText } from "../ui/header";
 import { NotebookPen } from "lucide-react";
-import { ProgrammingLanguagesDropdown } from "../ui/programming-lang-dropdown";
 import { Button } from "../ui/button";
 
 const QUICK_START_PROMPTS_SEARCH = [
@@ -42,10 +39,7 @@ function getRandomPrompts(prompts: string[], count: number = 4): string[] {
 }
 
 interface QuickStartButtonsProps {
-  handleQuickStart: (
-    type: "text" | "code",
-    language?: ProgrammingLanguageOptions
-  ) => void;
+  handleQuickStart: () => void;
   composer: React.ReactNode;
   searchEnabled: boolean;
 }
@@ -93,10 +87,6 @@ const QuickStartPrompts = ({ searchEnabled }: QuickStartPromptsProps) => {
 };
 
 const QuickStartButtons = (props: QuickStartButtonsProps) => {
-  const handleLanguageSubmit = (language: ProgrammingLanguageOptions) => {
-    props.handleQuickStart("code", language);
-  };
-
   return (
     <div className="flex flex-col gap-8 items-center justify-center w-full">
       <div className="flex flex-col gap-6">
@@ -107,12 +97,11 @@ const QuickStartButtons = (props: QuickStartButtonsProps) => {
           <Button
             variant="outline"
             className="text-primary font-medium border-primary/40 hover:border-primary/60 hover:bg-primary/10 transition-colors ease-in rounded-2xl flex items-center justify-center gap-2 w-[250px] h-[64px]"
-            onClick={() => props.handleQuickStart("text")}
+            onClick={() => props.handleQuickStart()}
           >
             New AFCEN Brief
             <NotebookPen />
           </Button>
-          <ProgrammingLanguagesDropdown handleSubmit={handleLanguageSubmit} />
         </div>
       </div>
       <div className="flex flex-col gap-6 mt-2 w-full">
@@ -127,10 +116,7 @@ const QuickStartButtons = (props: QuickStartButtonsProps) => {
 };
 
 interface ThreadWelcomeProps {
-  handleQuickStart: (
-    type: "text" | "code",
-    language?: ProgrammingLanguageOptions
-  ) => void;
+  handleQuickStart: () => void;
   composer: React.ReactNode;
   searchEnabled: boolean;
 }
@@ -142,11 +128,12 @@ export const ThreadWelcome: FC<ThreadWelcomeProps> = (
     <ThreadPrimitive.Empty>
       <div className="flex items-center justify-center mt-16 w-full px-4">
         <div className="text-center max-w-3xl w-full space-y-6">
-          <Avatar className="mx-auto size-16 border border-primary/30 bg-primary/10">
-            <AvatarFallback className="bg-primary/20 text-primary font-semibold">
-              AF
-            </AvatarFallback>
-          </Avatar>
+          <img
+            src="/logo.svg"
+            alt="Africa Climate and Energy Nexus"
+            className="mx-auto h-20 w-auto"
+            style={{ maxHeight: '80px' }}
+          />
           <TighterText className="text-sm uppercase text-primary/70 tracking-[0.25em]">
             Africa Climate & Energy Nexus
           </TighterText>
