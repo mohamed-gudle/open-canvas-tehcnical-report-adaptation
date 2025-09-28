@@ -146,7 +146,7 @@ export function CanvasComponent() {
           defaultSize={25}
           minSize={15}
           maxSize={50}
-          className="transition-all duration-700 h-screen mr-auto bg-gray-50/70 shadow-inner-right"
+          className="transition-all duration-700 h-screen mr-auto bg-primary/5 border-r border-primary/10 shadow-inner-right"
           id="chat-panel-main"
           order={1}
         >
@@ -206,7 +206,7 @@ export function CanvasComponent() {
             order={2}
             className="flex flex-row w-full"
           >
-            <div className="w-full ml-auto">
+            <div className="w-full ml-auto bg-card">
               <ArtifactRenderer
                 chatCollapsed={chatCollapsed}
                 setChatCollapsed={(c) => {

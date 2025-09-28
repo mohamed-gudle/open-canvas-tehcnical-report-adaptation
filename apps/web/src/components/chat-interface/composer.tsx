@@ -10,29 +10,29 @@ import { ComposerAttachments } from "../assistant-ui/attachment";
 import { ComposerActionsPopOut } from "./composer-actions-popout";
 
 const GENERIC_PLACEHOLDERS = [
-  "Share your big idea and let's write something amazing",
-  "Type your vision for the next great piece of content",
-  "Your masterpiece begins with this prompt",
-  "What would you like us to write about today?",
-  "Drop your content idea here and let's create",
-  "Your next great piece starts with this prompt",
-  "Share your story idea and watch it unfold",
-  "Let's write something incredible - start here",
-  "Your writing journey begins with this prompt",
-  "Turn your idea into content magic - start here",
+  "Describe the project AFCEN needs to fast-track",
+  "How can we unlock capital for your climate solution today?",
+  "Outline the policy milestone you want to accelerate",
+  "Share the impact story we should tell next",
+  "What update should we send to ministers or investors?",
+  "Sketch the delivery plan for your next energy corridor",
+  "Capture lessons learned from the latest field deployment",
+  "Draft guidance for partners joining the AFCEN workspace",
+  "Summarize the wins you need in this reporting cycle",
+  "What decision do we need to unblock for your project?",
 ];
 
 const SEARCH_PLACEHOLDERS = [
-  "Share your topic - I'll add live data",
-  "Write about anything - I'll find sources",
-  "Your idea + fresh research = great content",
-  "Start here with real-time facts",
-  "Topic here for data-rich content",
-  "Create with current insights",
-  "Write now with live sources",
-  "Your story + fresh data",
-  "Ideas welcome - research ready",
-  "Start fresh with live facts",
+  "Ask for permitting intel across your target countries",
+  "Need live climate finance data? Start with a question",
+  "Share a project idea and we will surface matching capital",
+  "What policies shape this corridor? I can pull the latest",
+  "Drop a challenge and I'll gather regional benchmarks",
+  "Looking for local partners? Describe the opportunity",
+  "Where do you need resilience data? Let's find it",
+  "Outline a barrier and I'll search AFCEN's knowledge graph",
+  "Need evidence for Cabinet? Tell me the headline",
+  "Type a goal and I'll add fresh insights to back it",
 ];
 
 const getRandomPlaceholder = (searchEnabled: boolean) => {
@@ -74,7 +74,7 @@ export const Composer: FC<ComposerProps> = (props: ComposerProps) => {
 
   return (
     <DragAndDropWrapper>
-      <ComposerPrimitive.Root className="focus-within:border-aui-ring/20 flex flex-col w-full min-h-[64px] flex-wrap items-center justify-center border px-2.5 shadow-sm transition-colors ease-in bg-white rounded-2xl">
+      <ComposerPrimitive.Root className="focus-within:ring-2 focus-within:ring-primary/30 focus-within:border-primary/50 flex flex-col w-full min-h-[64px] flex-wrap items-center justify-center border border-primary/20 bg-card/90 backdrop-blur px-2.5 shadow-sm transition-all ease-in rounded-2xl">
         <div className="flex flex-wrap gap-2 items-start mr-auto">
           <ComposerAttachments />
         </div>
@@ -88,7 +88,7 @@ export const Composer: FC<ComposerProps> = (props: ComposerProps) => {
             autoFocus
             placeholder={placeholder}
             rows={1}
-            className="placeholder:text-muted-foreground max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
+            className="placeholder:text-primary/50 text-primary max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
           />
           <ThreadPrimitive.If running={false}>
             <ComposerPrimitive.Send asChild>

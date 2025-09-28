@@ -1,6 +1,6 @@
 import { ProgrammingLanguageOptions } from "@opencanvas/shared/types";
 import { ThreadPrimitive, useThreadRuntime } from "@assistant-ui/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { FC, useMemo } from "react";
 import { TighterText } from "../ui/header";
 import { NotebookPen } from "lucide-react";
@@ -8,33 +8,33 @@ import { ProgrammingLanguagesDropdown } from "../ui/programming-lang-dropdown";
 import { Button } from "../ui/button";
 
 const QUICK_START_PROMPTS_SEARCH = [
-  "Write a market analysis of AI chip manufacturers in 2025",
-  "Create a blog post about the latest climate change policies and their impact",
-  "Draft an investor update on renewable energy trends this quarter",
-  "Write a report on current cybersecurity threats in cloud computing",
-  "Analyze the latest developments in quantum computing for a tech newsletter",
-  "Create a summary of emerging medical breakthroughs in cancer treatment",
-  "Write about the impact of current interest rates on the housing market",
-  "Draft an article about breakthroughs in battery technology this year",
-  "Analyze current supply chain disruptions in semiconductor manufacturing",
-  "Write about how recent AI regulations affect business innovation",
+  "Map the highest readiness clean-energy corridors across the ECOWAS region using latest policy data",
+  "Draft a permitting brief for a 100MW solar-plus-storage plant in northern Kenya",
+  "Summarize capital flows into African green hydrogen hubs over the past two quarters",
+  "Outline a blended finance structure to de-risk mini-grid rollouts in Sierra Leone",
+  "Build a dashboard concept that tracks NDC-aligned power projects in Southern Africa",
+  "Prepare investor talking points on resilient grid upgrades for West African capitals",
+  "Identify climate adaptation projects eligible for loss-and-damage funding in the Horn of Africa",
+  "Create a due diligence checklist for utility-scale wind investments in Namibia",
+  "Draft a briefing note on cross-border transmission partnerships within the Nile Basin",
+  "Plan a stakeholder workshop agenda for accelerating clean cooking access in urban Nigeria",
 ];
 
 const QUICK_START_PROMPTS = [
-  "Write a bedtime story about a brave little robot",
-  "Create a function to calculate Fibonacci numbers in TypeScript",
-  "Draft a resignation letter for a position I've had for 2 years",
-  "Build a simple weather dashboard using React and Tailwind",
-  "Write a poem about artificial intelligence",
-  "Create a basic Express.js REST API with two endpoints",
-  "Draft a congratulatory speech for my sister's graduation",
-  "Build a command-line calculator in Python",
-  "Write instructions for making perfect scrambled eggs",
-  "Create a simple snake game using HTML canvas",
-  "Write me a TODO app in React",
-  "Explain why the sky is blue in a short essay",
-  "Help me draft an email to my professor Craig",
-  "Write a web scraping program in Python",
+  "Write a vision statement for the Africa Climate and Energy Nexus workspace",
+  "Draft a partnership outreach email to development finance institutions",
+  "Sketch a project charter for scaling rooftop solar across francophone West Africa",
+  "Summarize the co-benefits of regenerative agriculture pilots in Rwanda",
+  "Create a sprint plan for digitizing permitting workflows in Tanzania",
+  "Draft a celebratory announcement for a newly funded AFCEN flagship project",
+  "Translate an impact brief on resilient microgrids into investor-friendly copy",
+  "Outline an AFCEN governance update for regional energy ministers",
+  "Break down a community solar revenue model for peri-urban Ghana",
+  "Prepare a progress update for AFCEN's climate data commons initiative",
+  "Write a feature story spotlighting women-led climate ventures on the platform",
+  "Draft a project update on grid integration lessons from South African renewables",
+  "Compose guidance for governments on accelerating green industrial corridors",
+  "Build a checklist for onboarding new AFCEN project developers",
 ];
 
 function getRandomPrompts(prompts: string[], count: number = 4): string[] {
@@ -80,7 +80,7 @@ const QuickStartPrompts = ({ searchEnabled }: QuickStartPromptsProps) => {
             key={`quick-start-prompt-${index}`}
             onClick={() => handleClick(prompt)}
             variant="outline"
-            className="min-h-[60px] w-full flex items-center justify-center p-6 whitespace-normal text-gray-500 hover:text-gray-700 transition-colors ease-in rounded-2xl"
+            className="min-h-[60px] w-full flex items-center justify-center p-6 whitespace-normal border-primary/30 text-primary/80 hover:text-primary bg-white/60 hover:bg-primary/10 transition-colors ease-in rounded-2xl"
           >
             <p className="text-center break-words text-sm font-normal">
               {prompt}
@@ -100,21 +100,25 @@ const QuickStartButtons = (props: QuickStartButtonsProps) => {
   return (
     <div className="flex flex-col gap-8 items-center justify-center w-full">
       <div className="flex flex-col gap-6">
-        <p className="text-gray-600 text-sm">Start with a blank canvas</p>
+        <p className="text-primary/70 text-sm uppercase tracking-[0.2em]">
+          Launch an AFCEN workspace
+        </p>
         <div className="flex flex-row gap-1 items-center justify-center w-full">
           <Button
             variant="outline"
-            className="text-gray-500 hover:text-gray-700 transition-colors ease-in rounded-2xl flex items-center justify-center gap-2 w-[250px] h-[64px]"
+            className="text-primary font-medium border-primary/40 hover:border-primary/60 hover:bg-primary/10 transition-colors ease-in rounded-2xl flex items-center justify-center gap-2 w-[250px] h-[64px]"
             onClick={() => props.handleQuickStart("text")}
           >
-            New Markdown
+            New AFCEN Brief
             <NotebookPen />
           </Button>
           <ProgrammingLanguagesDropdown handleSubmit={handleLanguageSubmit} />
         </div>
       </div>
       <div className="flex flex-col gap-6 mt-2 w-full">
-        <p className="text-gray-600 text-sm">or with a message</p>
+        <p className="text-primary/70 text-sm uppercase tracking-[0.2em]">
+          Or start with a prompt
+        </p>
         {props.composer}
         <QuickStartPrompts searchEnabled={props.searchEnabled} />
       </div>
@@ -136,16 +140,26 @@ export const ThreadWelcome: FC<ThreadWelcomeProps> = (
 ) => {
   return (
     <ThreadPrimitive.Empty>
-      <div className="flex items-center justify-center mt-16 w-full">
-        <div className="text-center max-w-3xl w-full">
-          <Avatar className="mx-auto">
-            <AvatarImage src="/lc_logo.jpg" alt="LangChain Logo" />
-            <AvatarFallback>LC</AvatarFallback>
+      <div className="flex items-center justify-center mt-16 w-full px-4">
+        <div className="text-center max-w-3xl w-full space-y-6">
+          <Avatar className="mx-auto size-16 border border-primary/30 bg-primary/10">
+            <AvatarFallback className="bg-primary/20 text-primary font-semibold">
+              AF
+            </AvatarFallback>
           </Avatar>
-          <TighterText className="mt-4 text-lg font-medium">
-            What would you like to write today?
+          <TighterText className="text-sm uppercase text-primary/70 tracking-[0.25em]">
+            Africa Climate & Energy Nexus
           </TighterText>
-          <div className="mt-8 w-full">
+          <h1 className="text-3xl md:text-4xl font-semibold text-primary">
+            Africa is shaping solutions for the world — how can we accelerate
+            your climate and energy project today?
+          </h1>
+          <p className="mx-auto max-w-2xl text-base text-primary/80">
+            AFCEN brings projects, policy, and capital into a single workspace
+            so governments, developers, and investors can track readiness,
+            de-risk pipelines, and deliver faster.
+          </p>
+          <div className="mt-10 w-full">
             <QuickStartButtons
               composer={props.composer}
               handleQuickStart={props.handleQuickStart}
