@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function exportNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("📤 Starting Export phase for concept note");
 
@@ -118,8 +118,8 @@ async function generateExportContent(
   assumptionsLog?: any,
   todos?: any,
   citations?: any,
-  format = "markdown",
-  length = "standard"
+  _format: string = "markdown",
+  length: string = "standard"
 ): Promise<string> {
   const title = userInputs?.title || "Concept Note";
   const date = new Date().toLocaleDateString();

@@ -1,11 +1,6 @@
 import { LangGraphRunnableConfig } from "@langchain/langgraph";
-import {
-  ClarifyingQuestion,
-  ConceptNoteGraphReturnType,
-  ConceptNoteGraphState,
-  UserInputs,
-} from "../../concept-note-state.js";
-import { AIMessage, BaseMessage } from "@langchain/core/messages";
+import { ConceptNoteGraphState, ConceptNoteGraphReturnType, UserInputs } from "../../concept-note-state.js";
+import { AIMessage } from "@langchain/core/messages";
 import { v4 as uuidv4 } from "uuid";
 
 const MAX_QUESTIONS_PER_PROMPT = 4;
@@ -130,7 +125,7 @@ const BLUEPRINT_LOOKUP = new Map<keyof UserInputs, ClarityBlueprintEntry>(
 
 export async function userIntakeNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig,
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("🎯 Starting User Intake phase for concept note");
   void config;
@@ -765,8 +760,8 @@ function extractTitle(content: string): string | undefined {
 
 function extractDescription(content: string): string | undefined {
   const descPatterns = [
-    /(?:description|about|details?):\s*(.+?)(?:\n\n|$)/is,
-    /(?:project|initiative)\s+(?:is\s+)?(?:about|involves?)\s+(.+?)(?:\n|\.)/i,
+    /(?:description|about|details?):\s*(.+?)(?:\n\n|$)/i,
+    /(?:project|initiative)\s+(?:is\s+)?(?:about|involves?)\s+(.+?)(?:\n|\.)/i
   ];
 
   for (const pattern of descPatterns) {
@@ -853,132 +848,20 @@ function extractScope(content: string): string | undefined {
 function extractRequirements(content: string): string[] {
   const block = extractListFromPatterns(content, [
     /(?:requirements?|needs?|must\s+haves?):\s*((?:[-*•]\s*.+\n?)+)/i,
-    /requirements?\s*\n((?:[-*•]\s*.+\n?)+)/i,
-  ]);
-  if (block.length > 0) {
-    return block;
+    /(?:[-*•]\s*(.+))/g
+  ];
+  
+  for (const pattern of listPatterns) {
+    let match;
+    const regex = new RegExp(pattern.source, pattern.flags);
+    while ((match = regex.exec(content)) !== null) {
+      if (match[1]) {
+        requirements.push(match[1].trim());
+      }
+      // Prevent infinite loop for global regex
+      if (!pattern.flags.includes('g')) break;
+    }
   }
-
-  const enumerated = Array.from(content.matchAll(/requirement\s*(?:\d+|[A-Z])[:)\-]\s*(.+)/gi))
-    .map(match => match[1].trim())
-    .filter(item => item.length > 0);
-  if (enumerated.length > 0) {
-    return enumerated;
-  }
-
-  const inline = extractInlineListFromPatterns(content, [
-    /(?:requirements?|needs?|must\s+haves?):\s*(.+?)(?:\n|$)/i,
-  ]);
-
-  return inline;
-}
-
-function extractObjectives(content: string): string[] {
-  const block = extractListFromPatterns(content, [
-    /(?:objectives?|goals?):\s*((?:[-*•]\s*.+\n?)+)/i,
-    /objectives?\s*\n((?:[-*•]\s*.+\n?)+)/i,
-  ]);
-  if (block.length > 0) {
-    return block;
-  }
-
-  const enumerated = Array.from(content.matchAll(/objective\s*(?:\d+|[A-Z])[:)\-]\s*(.+)/gi))
-    .map(match => match[1].trim())
-    .filter(item => item.length > 0);
-  if (enumerated.length > 0) {
-    return enumerated;
-  }
-
-  const inline = extractInlineListFromPatterns(content, [
-    /(?:objectives?|goals?):\s*(.+?)(?:\n|$)/i,
-  ]);
-  return inline;
-}
-
-function extractKeyActivities(content: string): string[] {
-  const block = extractListFromPatterns(content, [
-    /(?:activities|workstreams|phases|deliverables):\s*((?:[-*•]\s*.+\n?)+)/i,
-  ]);
-  if (block.length > 0) {
-    return block;
-  }
-
-  const enumerated = Array.from(content.matchAll(/(?:activity|phase)\s*(?:\d+|[A-Z])[:)\-]\s*(.+)/gi))
-    .map(match => match[1].trim())
-    .filter(item => item.length > 0);
-  if (enumerated.length > 0) {
-    return enumerated;
-  }
-
-  const inline = extractInlineListFromPatterns(content, [
-    /(?:activities|workstreams|phases|deliverables):\s*(.+?)(?:\n|$)/i,
-  ]);
-
-  return inline;
-}
-
-function extractKeyChallenges(content: string): string[] {
-  const block = extractListFromPatterns(content, [
-    /(?:challenges|risks|constraints|pain\s*points):\s*((?:[-*•]\s*.+\n?)+)/i,
-  ]);
-  if (block.length > 0) {
-    return block;
-  }
-
-  const enumerated = Array.from(content.matchAll(/(?:risk|constraint)\s*(?:\d+|[A-Z])[:)\-]\s*(.+)/gi))
-    .map(match => match[1].trim())
-    .filter(item => item.length > 0);
-  if (enumerated.length > 0) {
-    return enumerated;
-  }
-
-  const inline = extractInlineListFromPatterns(content, [
-    /(?:challenges|risks|constraints|pain\s*points):\s*(.+?)(?:\n|$)/i,
-  ]);
-
-  return inline;
-}
-
-function extractSuccessMetrics(content: string): string[] {
-  const block = extractListFromPatterns(content, [
-    /(?:success\s+metrics|kpis?|key\s+results|impact\s+metrics):\s*((?:[-*•]\s*.+\n?)+)/i,
-  ]);
-  if (block.length > 0) {
-    return block;
-  }
-
-  const enumerated = Array.from(content.matchAll(/(?:kpi|metric)\s*(?:\d+|[A-Z])[:)\-]\s*(.+)/gi))
-    .map(match => match[1].trim())
-    .filter(item => item.length > 0);
-  if (enumerated.length > 0) {
-    return enumerated;
-  }
-
-  const inline = extractInlineListFromPatterns(content, [
-    /(?:success\s+metrics|kpis?|key\s+results|impact\s+metrics):\s*(.+?)(?:\n|$)/i,
-  ]);
-
-  return inline;
-}
-
-function extractKeyPartners(content: string): string[] {
-  const block = extractListFromPatterns(content, [
-    /(?:partners|departments|teams|collaborators|champions):\s*((?:[-*•]\s*.+\n?)+)/i,
-  ]);
-  if (block.length > 0) {
-    return block;
-  }
-
-  const enumerated = Array.from(content.matchAll(/(?:partner|department|team)\s*(?:\d+|[A-Z])[:)\-]\s*(.+)/gi))
-    .map(match => match[1].trim())
-    .filter(item => item.length > 0);
-  if (enumerated.length > 0) {
-    return enumerated;
-  }
-
-  const inline = extractInlineListFromPatterns(content, [
-    /(?:partners|departments|teams|collaborators|champions):\s*(.+?)(?:\n|$)/i,
-  ]);
-
-  return inline;
+  
+  return requirements.length > 0 ? requirements : [];
 }

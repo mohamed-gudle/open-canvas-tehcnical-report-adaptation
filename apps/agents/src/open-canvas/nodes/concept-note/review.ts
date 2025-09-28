@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function reviewNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("🔍 Starting Review phase for concept note");
 
@@ -35,7 +35,7 @@ export async function reviewNode(
     const reviewTodos: TodoItems = { items: [] };
     
     if (reviewResults.issues.length > 0) {
-      reviewResults.issues.forEach(issue => {
+      reviewResults.issues.forEach((issue) => {
         reviewTodos.items.push({
           id: uuidv4(),
           task: `Address review issue: ${issue.description}`,
@@ -228,24 +228,21 @@ async function performQualityReview(
  */
 async function applyAutomaticImprovements(
   draft: ConceptDraft,
-  improvements: Array<{ type: string; description: string; section: string }>
+  _improvements: Array<{ type: string; description: string; section: string }>
 ): Promise<ConceptDraft> {
-  const updatedDraft = { ...draft };
-  
   // Apply minor formatting and text improvements
-  improvements.forEach(improvement => {
-    if (improvement.type === "formatting" && improvement.section in updatedDraft) {
-      // Apply formatting improvements (placeholder for actual implementation)
-      const currentContent = (updatedDraft as any)[improvement.section];
-      if (currentContent) {
-        (updatedDraft as any)[improvement.section] = currentContent;
-      }
-    }
-  });
+  // improvements.forEach(improvement => {
+  //   if (improvement.type === "formatting" && improvement.section in updatedDraft) {
+  //     // Apply formatting improvements (placeholder for actual implementation)
+  //     const currentContent = (updatedDraft as any)[improvement.section];
+  //     if (currentContent) {
+  //       (updatedDraft as any)[improvement.section] = currentContent;
+  //     }
+  //   }
+  // });
 
   // Update version and timestamp
-  updatedDraft.version = draft.version + 0.1;
-  updatedDraft.lastUpdated = new Date().toISOString();
+  const updatedDraft = { ...draft, version: draft.version + 0.1, lastUpdated: new Date().toISOString() };
 
   return updatedDraft;
 }
@@ -260,7 +257,7 @@ function generateReviewMessage(
     improvements: Array<any>; 
     completeness: number; 
   },
-  draft: ConceptDraft
+  _draft: ConceptDraft
 ): string {
   let message = `🔍 **Concept Note Review Complete**\n\n`;
   

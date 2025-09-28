@@ -299,23 +299,15 @@ export const ConceptNoteGraphAnnotation = Annotation.Root({
   }),
 
   // Control flow for the concept note builder
-  conceptNoteStage: Annotation<
-    | "intake"
-    | "research"
-    | "compute"
-    | "draft"
-    | "review"
-    | "export"
-    | "completed"
-  >({
-    reducer: (state, update) => (update ?? state ?? "intake"),
-    default: () => "intake",
+  conceptNoteStage: Annotation<"intake" | "research" | "compute" | "draft" | "review" | "export" | "completed">({
+    reducer: (state, update) => update ?? state,
+    default: () => "intake"
   }),
 
   // Flag to indicate if HITL intervention is needed
   needsUserIntervention: Annotation<boolean>({
-    reducer: (state, update) => (update ?? state ?? false),
-    default: () => false,
+    reducer: (state, update) => update ?? state,
+    default: () => false
   }),
 
   // Store intervention context

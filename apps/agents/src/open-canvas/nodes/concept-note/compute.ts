@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function computeNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("⚙️ Starting Compute phase for concept note");
 
@@ -79,7 +79,7 @@ export async function computeNode(
 /**
  * Extract key themes from project description and research
  */
-function extractKeyThemes(description?: string, researchNotes?: any): string[] {
+function extractKeyThemes(description?: string, _researchNotes?: any): string[] {
   const themes: string[] = [];
   
   if (!description) return ["Project implementation"];
@@ -139,7 +139,7 @@ function extractKeyThemes(description?: string, researchNotes?: any): string[] {
 /**
  * Identify project stakeholders
  */
-function identifyStakeholders(userInputs?: any, researchNotes?: any): string[] {
+function identifyStakeholders(userInputs?: any, _researchNotes?: any): string[] {
   const stakeholders: string[] = [];
   
   // Always include basic stakeholders
@@ -186,13 +186,19 @@ function identifyStakeholders(userInputs?: any, researchNotes?: any): string[] {
   }
   
   // Remove duplicates
-  return [...new Set(stakeholders)];
+  const uniqueStakeholders: string[] = [];
+  stakeholders.forEach(stakeholder => {
+    if (uniqueStakeholders.indexOf(stakeholder) === -1) {
+      uniqueStakeholders.push(stakeholder);
+    }
+  });
+  return uniqueStakeholders;
 }
 
 /**
  * Assess project risks
  */
-function assessRisks(userInputs?: any, researchNotes?: any): Array<{
+function assessRisks(userInputs?: any, _researchNotes?: any): Array<{
   risk: string;
   impact: "low" | "medium" | "high";
   likelihood: "low" | "medium" | "high";
@@ -351,7 +357,7 @@ function analyzeResourceNeeds(userInputs?: any, stakeholders?: string[]): {
 /**
  * Generate todo items for project planning
  */
-function generateTodoItems(userInputs?: any, derivedData?: DerivedData): Array<{
+function generateTodoItems(userInputs?: any, _derivedData?: DerivedData): Array<{
   id: string;
   task: string;
   priority: "low" | "medium" | "high";

@@ -35,7 +35,7 @@ function routeConceptNoteFlow(state: ConceptNoteGraphState): string | typeof END
     case "compute":
       return "compute";
     case "draft":
-      return "draft";
+      return "draftGenerator";
     case "review":
       return "review";
     case "export":
@@ -50,7 +50,7 @@ function routeConceptNoteFlow(state: ConceptNoteGraphState): string | typeof END
 /**
  * Handle user intervention node - pauses for HITL interaction
  */
-async function waitForUserNode(state: ConceptNoteGraphState): Promise<Partial<ConceptNoteGraphState>> {
+async function waitForUserNode(_state: ConceptNoteGraphState): Promise<Partial<ConceptNoteGraphState>> {
   console.log("⏸️ Waiting for user intervention");
   void state;
   
@@ -80,7 +80,7 @@ const builder = new StateGraph(ConceptNoteGraphAnnotation)
   .addNode("userIntake", userIntakeNode)
   .addNode("research", researchNode)
   .addNode("compute", computeNode)
-  .addNode("draft", draftNode)
+  .addNode("draftGenerator", draftNode)
   .addNode("review", reviewNode)
   .addNode("export", exportNode)
   .addNode("waitForUser", waitForUserNode)
@@ -102,12 +102,12 @@ const builder = new StateGraph(ConceptNoteGraphAnnotation)
   ])
   
   .addConditionalEdges("compute", routeConceptNoteFlow, [
-    "draft",
+    "draftGenerator",
     "waitForUser", 
     END
   ])
   
-  .addConditionalEdges("draft", routeConceptNoteFlow, [
+  .addConditionalEdges("draftGenerator", routeConceptNoteFlow, [
     "review",
     "waitForUser",
     END
@@ -129,7 +129,7 @@ const builder = new StateGraph(ConceptNoteGraphAnnotation)
     "userIntake",
     "research", 
     "compute",
-    "draft",
+    "draftGenerator",
     "review",
     "export",
     END
@@ -137,7 +137,7 @@ const builder = new StateGraph(ConceptNoteGraphAnnotation)
 
 // Add interrupt points before critical nodes
 export const conceptNoteGraph = builder.compile({
-  interruptBefore: ["research", "draft", "review", "export"], // HITL interrupt points
+  interruptBefore: ["research", "draftGenerator", "review", "export"], // HITL interrupt points
   interruptAfter: ["userIntake", "compute"] // Additional interrupt points after key stages
 });
 
@@ -147,10 +147,10 @@ conceptNoteGraph.name = "Concept Note Builder Graph";
  * Helper function to initialize concept note generation
  */
 export function createConceptNoteInput(userMessage: string, customOptions?: any): Partial<ConceptNoteGraphState> {
-  const initialMessage = new HumanMessage({ content: userMessage });
+  const humanMessage = new HumanMessage({ content: userMessage });
   return {
-    messages: [initialMessage],
-    _messages: [initialMessage],
+    messages: [humanMessage],
+    _messages: [humanMessage],
     conceptNoteStage: "intake",
     needsUserIntervention: false,
     userInputs: customOptions?.userInputs || {},
@@ -173,9 +173,9 @@ export function resumeConceptNoteGeneration(
 
   // Add user response if provided
   if (userResponse) {
-    const responseMessage = new HumanMessage({ content: userResponse });
-    updates.messages = [responseMessage];
-    updates._messages = [responseMessage];
+    const humanMessage = new HumanMessage({ content: userResponse });
+    updates.messages = [humanMessage];
+    updates._messages = [humanMessage];
   }
 
   // Update user inputs if provided

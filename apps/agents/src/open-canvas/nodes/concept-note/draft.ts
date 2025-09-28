@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function draftNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("📝 Starting Draft phase for concept note");
 
@@ -158,7 +158,7 @@ function generateProposedSolution(userInputs?: any, derivedData?: any, researchN
 /**
  * Generate implementation plan
  */
-function generateImplementationPlan(userInputs?: any, derivedData?: any): string {
+function generateImplementationPlan(_userInputs?: any, derivedData?: any): string {
   const resourceNeeds = derivedData?.resourceNeeds || {};
   const stakeholders = derivedData?.stakeholders || [];
   
@@ -211,7 +211,7 @@ function generateImplementationPlan(userInputs?: any, derivedData?: any): string
 /**
  * Generate timeline section
  */
-function generateTimelineSection(userInputs?: any, derivedData?: any): string {
+function generateTimelineSection(userInputs?: any, _derivedData?: any): string {
   const projectTimeline = userInputs?.timeline || "12 months";
   
   let timeline = `**Project Duration**: ${projectTimeline}\n\n`;
@@ -241,9 +241,9 @@ function generateTimelineSection(userInputs?: any, derivedData?: any): string {
 /**
  * Generate budget section
  */
-function generateBudgetSection(userInputs?: any, derivedData?: any): string {
+function generateBudgetSection(userInputs?: any, _derivedData?: any): string {
   const projectBudget = userInputs?.budget || "Budget to be determined";
-  const resourceNeeds = derivedData?.resourceNeeds || {};
+  // For future use: const resourceNeeds = derivedData?.resourceNeeds || {};
   
   let budget = `**Total Project Budget**: ${projectBudget}\n\n`;
   
@@ -308,7 +308,7 @@ function generateRiskManagement(derivedData?: any): string {
 /**
  * Generate expected outcomes section
  */
-function generateExpectedOutcomes(userInputs?: any, derivedData?: any): string {
+function generateExpectedOutcomes(_userInputs?: any, derivedData?: any): string {
   const successMetrics = derivedData?.successMetrics || [];
   const keyThemes = derivedData?.keyThemes || [];
   
