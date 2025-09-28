@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function reviewNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("🔍 Starting Review phase for concept note");
 
@@ -34,7 +34,7 @@ export async function reviewNode(
     const reviewTodos: TodoItems = { items: [] };
     
     if (reviewResults.issues.length > 0) {
-      reviewResults.issues.forEach((issue, index) => {
+      reviewResults.issues.forEach((issue) => {
         reviewTodos.items.push({
           id: uuidv4(),
           task: `Address review issue: ${issue.description}`,
@@ -227,24 +227,21 @@ async function performQualityReview(
  */
 async function applyAutomaticImprovements(
   draft: ConceptDraft,
-  improvements: Array<{ type: string; description: string; section: string }>
+  _improvements: Array<{ type: string; description: string; section: string }>
 ): Promise<ConceptDraft> {
-  const updatedDraft = { ...draft };
-  
   // Apply minor formatting and text improvements
-  improvements.forEach(improvement => {
-    if (improvement.type === "formatting" && improvement.section in updatedDraft) {
-      // Apply formatting improvements (placeholder for actual implementation)
-      const currentContent = (updatedDraft as any)[improvement.section];
-      if (currentContent) {
-        (updatedDraft as any)[improvement.section] = currentContent;
-      }
-    }
-  });
+  // improvements.forEach(improvement => {
+  //   if (improvement.type === "formatting" && improvement.section in updatedDraft) {
+  //     // Apply formatting improvements (placeholder for actual implementation)
+  //     const currentContent = (updatedDraft as any)[improvement.section];
+  //     if (currentContent) {
+  //       (updatedDraft as any)[improvement.section] = currentContent;
+  //     }
+  //   }
+  // });
 
   // Update version and timestamp
-  updatedDraft.version = draft.version + 0.1;
-  updatedDraft.lastUpdated = new Date().toISOString();
+  const updatedDraft = { ...draft, version: draft.version + 0.1, lastUpdated: new Date().toISOString() };
 
   return updatedDraft;
 }
@@ -259,7 +256,7 @@ function generateReviewMessage(
     improvements: Array<any>; 
     completeness: number; 
   },
-  draft: ConceptDraft
+  _draft: ConceptDraft
 ): string {
   let message = `🔍 **Concept Note Review Complete**\n\n`;
   
@@ -287,39 +284,4 @@ function generateReviewMessage(
   message += `The concept note is now ready for export in your preferred format.`;
   
   return message;
-}
-
-/**
- * Generate detailed review report (for future use)
- */
-function generateDetailedReviewReport(
-  reviewResults: { 
-    score: number; 
-    issues: Array<any>; 
-    improvements: Array<any>; 
-    completeness: number; 
-  }
-): string {
-  let report = `# Concept Note Review Report\n\n`;
-  
-  report += `**Overall Quality Score**: ${Math.round(reviewResults.score)}/100\n`;
-  report += `**Completeness**: ${Math.round(reviewResults.completeness)}%\n\n`;
-  
-  if (reviewResults.issues.length > 0) {
-    report += `## Issues Identified\n\n`;
-    reviewResults.issues.forEach((issue, index) => {
-      const severityIcon = issue.severity === "high" ? "🔴" : issue.severity === "medium" ? "🟡" : "🟢";
-      report += `${index + 1}. ${severityIcon} **${issue.section}**: ${issue.description}\n`;
-    });
-    report += `\n`;
-  }
-  
-  if (reviewResults.improvements.length > 0) {
-    report += `## Improvement Recommendations\n\n`;
-    reviewResults.improvements.forEach((improvement, index) => {
-      report += `${index + 1}. **${improvement.section}** (${improvement.type}): ${improvement.description}\n`;
-    });
-  }
-  
-  return report;
 }

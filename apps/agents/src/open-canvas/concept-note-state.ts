@@ -1,4 +1,4 @@
-import { StateGraph, START, END, Annotation } from "@langchain/langgraph";
+import { Annotation } from "@langchain/langgraph";
 import { OpenCanvasGraphAnnotation } from "./state.js";
 
 /**
@@ -237,11 +237,13 @@ export const ConceptNoteGraphAnnotation = Annotation.Root({
 
   // Control flow for the concept note builder
   conceptNoteStage: Annotation<"intake" | "research" | "compute" | "draft" | "review" | "export" | "completed">({
+    reducer: (state, update) => update ?? state,
     default: () => "intake"
   }),
   
   // Flag to indicate if HITL intervention is needed
   needsUserIntervention: Annotation<boolean>({
+    reducer: (state, update) => update ?? state,
     default: () => false
   }),
   

@@ -167,7 +167,7 @@ async function handleMissingData(state: ConceptNoteGraphState): Promise<{
 /**
  * Research best practices (placeholder implementation)
  */
-async function researchBestPractices(description: string, config: LangGraphRunnableConfig): Promise<string[]> {
+async function researchBestPractices(description: string, _config: LangGraphRunnableConfig): Promise<string[]> {
   // TODO: Implement actual research using web search APIs
   // For now, return placeholder best practices based on keywords
   
@@ -211,7 +211,7 @@ async function researchBestPractices(description: string, config: LangGraphRunna
 /**
  * Research case studies (placeholder implementation)
  */
-async function researchCaseStudies(title: string, description: string, config: LangGraphRunnableConfig): Promise<Array<{
+async function researchCaseStudies(title: string, _description: string, _config: LangGraphRunnableConfig): Promise<Array<{
   title: string;
   description: string;
   relevantLessons: string[];
@@ -244,7 +244,7 @@ async function researchCaseStudies(title: string, description: string, config: L
 /**
  * Research compliance requirements (placeholder implementation)
  */
-async function researchCompliance(scope: string, config: LangGraphRunnableConfig): Promise<string[]> {
+async function researchCompliance(scope: string, _config: LangGraphRunnableConfig): Promise<string[]> {
   // TODO: Implement actual compliance research
   // For now, return placeholder compliance considerations
   

@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function draftNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("📝 Starting Draft phase for concept note");
 
@@ -146,7 +146,7 @@ function generateProposedSolution(userInputs?: any, derivedData?: any, researchN
   
   if (bestPractices.length > 0) {
     solution += "This approach incorporates industry best practices including:\n";
-    bestPractices.slice(0, 3).forEach(practice => {
+    bestPractices.slice(0, 3).forEach((practice: string) => {
       solution += `• ${practice}\n`;
     });
   }
@@ -157,7 +157,7 @@ function generateProposedSolution(userInputs?: any, derivedData?: any, researchN
 /**
  * Generate implementation plan
  */
-function generateImplementationPlan(userInputs?: any, derivedData?: any): string {
+function generateImplementationPlan(_userInputs?: any, derivedData?: any): string {
   const resourceNeeds = derivedData?.resourceNeeds || {};
   const stakeholders = derivedData?.stakeholders || [];
   
@@ -191,7 +191,7 @@ function generateImplementationPlan(userInputs?: any, derivedData?: any): string
   
   if (stakeholders.length > 0) {
     implementation += "**Stakeholder Engagement:**\n";
-    stakeholders.slice(0, 5).forEach(stakeholder => {
+    stakeholders.slice(0, 5).forEach((stakeholder: string) => {
       implementation += `• ${stakeholder}: Regular communication and involvement in key decisions\n`;
     });
   }
@@ -202,7 +202,7 @@ function generateImplementationPlan(userInputs?: any, derivedData?: any): string
 /**
  * Generate timeline section
  */
-function generateTimelineSection(userInputs?: any, derivedData?: any): string {
+function generateTimelineSection(userInputs?: any, _derivedData?: any): string {
   const projectTimeline = userInputs?.timeline || "12 months";
   
   let timeline = `**Project Duration**: ${projectTimeline}\n\n`;
@@ -224,9 +224,9 @@ function generateTimelineSection(userInputs?: any, derivedData?: any): string {
 /**
  * Generate budget section
  */
-function generateBudgetSection(userInputs?: any, derivedData?: any): string {
+function generateBudgetSection(userInputs?: any, _derivedData?: any): string {
   const projectBudget = userInputs?.budget || "Budget to be determined";
-  const resourceNeeds = derivedData?.resourceNeeds || {};
+  // For future use: const resourceNeeds = derivedData?.resourceNeeds || {};
   
   let budget = `**Total Project Budget**: ${projectBudget}\n\n`;
   
@@ -284,7 +284,7 @@ function generateRiskManagement(derivedData?: any): string {
 /**
  * Generate expected outcomes section
  */
-function generateExpectedOutcomes(userInputs?: any, derivedData?: any): string {
+function generateExpectedOutcomes(_userInputs?: any, derivedData?: any): string {
   const successMetrics = derivedData?.successMetrics || [];
   const keyThemes = derivedData?.keyThemes || [];
   
@@ -298,7 +298,7 @@ function generateExpectedOutcomes(userInputs?: any, derivedData?: any): string {
   
   if (keyThemes.length > 0) {
     outcomes += "**Thematic Outcomes**:\n";
-    keyThemes.forEach(theme => {
+    keyThemes.forEach((theme: string) => {
       outcomes += `• Measurable progress in ${theme.toLowerCase()}\n`;
     });
     outcomes += "\n";
@@ -306,7 +306,7 @@ function generateExpectedOutcomes(userInputs?: any, derivedData?: any): string {
   
   if (successMetrics.length > 0) {
     outcomes += "**Success Metrics**:\n";
-    successMetrics.slice(0, 5).forEach(metric => {
+    successMetrics.slice(0, 5).forEach((metric: string) => {
       outcomes += `• ${metric}\n`;
     });
     outcomes += "\n";

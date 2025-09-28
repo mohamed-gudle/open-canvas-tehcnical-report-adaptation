@@ -1,6 +1,6 @@
 import { LangGraphRunnableConfig } from "@langchain/langgraph";
 import { ConceptNoteGraphState, ConceptNoteGraphReturnType, UserInputs } from "../../concept-note-state.js";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import { AIMessage } from "@langchain/core/messages";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export async function userIntakeNode(
   state: ConceptNoteGraphState,
-  config: LangGraphRunnableConfig
+  _config: LangGraphRunnableConfig
 ): Promise<ConceptNoteGraphReturnType> {
   console.log("🎯 Starting User Intake phase for concept note");
 
