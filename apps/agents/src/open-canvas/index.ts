@@ -16,6 +16,7 @@ import { OpenCanvasGraphAnnotation } from "./state.js";
 import { summarizer } from "./nodes/summarizer.js";
 import { graph as webSearchGraph } from "../web-search/index.js";
 import { createAIMessageFromWebResults } from "../utils.js";
+import { conceptNoteAction } from "./nodes/concept-note-action.js";
 
 const routeNode = (state: typeof OpenCanvasGraphAnnotation.State) => {
   if (!state.next) {
@@ -118,6 +119,7 @@ const builder = new StateGraph(OpenCanvasGraphAnnotation)
   .addNode("updateHighlightedText", updateHighlightedText)
   .addNode("generateArtifact", generateArtifact)
   .addNode("customAction", customAction)
+  .addNode("conceptNoteAction", conceptNoteAction)
   .addNode("generateFollowup", generateFollowup)
   .addNode("cleanState", cleanState)
   .addNode("reflect", reflectNode)
@@ -134,6 +136,7 @@ const builder = new StateGraph(OpenCanvasGraphAnnotation)
     "generateArtifact",
     "rewriteArtifact",
     "customAction",
+    "conceptNoteAction",
     "updateHighlightedText",
     "webSearch",
   ])
@@ -145,6 +148,7 @@ const builder = new StateGraph(OpenCanvasGraphAnnotation)
   .addEdge("rewriteArtifactTheme", "generateFollowup")
   .addEdge("rewriteCodeArtifactTheme", "generateFollowup")
   .addEdge("customAction", "generateFollowup")
+  .addEdge("conceptNoteAction", "generateFollowup")
   .addEdge("webSearch", "routePostWebSearch")
   // End edges
   .addEdge("replyToGeneralInput", "cleanState")
