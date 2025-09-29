@@ -23,6 +23,8 @@ const QUICK_START_PROMPTS = [
   "Sketch a project charter for scaling rooftop solar across francophone West Africa",
   "Summarize the co-benefits of regenerative agriculture pilots in Rwanda",
   "Create a sprint plan for digitizing permitting workflows in Tanzania",
+  "Guide me through drafting a product requirements document for the AFCEN grid analytics project",
+  "Help me assemble a technical design document for the cross-border transmission data platform",
   "Draft a celebratory announcement for a newly funded AFCEN flagship project",
   "Translate an impact brief on resilient microgrids into investor-friendly copy",
   "Outline an AFCEN governance update for regional energy ministers",

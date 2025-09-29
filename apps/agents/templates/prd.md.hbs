@@ -1,0 +1,43 @@
+# {{title}}
+
+## Executive Summary
+{{overview}}
+
+## Goals
+{{goals}}
+
+## Target Users
+{{target_users}}
+
+## Functional Requirements
+{{requirements}}
+
+## Success Metrics
+{{success_metrics}}
+
+## Non-Goals
+{{non_goals}}
+
+{{#if risks}}
+## Risks & Mitigations
+{{risks}}
+{{/if}}
+
+{{#if rollout_plan}}
+## Rollout Plan
+{{rollout_plan}}
+{{/if}}
+
+{{#if dependencies}}
+## Dependencies
+{{dependencies}}
+{{/if}}
+
+{{#if citations}}
+---
+
+## References
+{{#each citations}}
+- [{{this.label}}]({{this.url}}): {{this.note}}
+{{/each}}
+{{/if}}

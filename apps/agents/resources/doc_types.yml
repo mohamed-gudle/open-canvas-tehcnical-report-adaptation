@@ -1,0 +1,213 @@
+# Canonical requirements for supported technical documents.
+# Fields are referenced by the docs agent to drive Q&A and template filling.
+doc_types:
+  - id: prd
+    name: Product Requirements Document
+    description: Outlines the what/why for a product initiative so engineering can scope work.
+    stage_hint: discovery
+    template: prd.md.hbs
+    required_fields:
+      - id: overview
+        label: Executive Summary
+        description: One paragraph on the customer problem, opportunity, and outcome.
+        weight: 3
+      - id: goals
+        label: Goals
+        description: Ordered list of measurable goals.
+        weight: 3
+      - id: non_goals
+        label: Non-Goals
+        description: Constraints and what success does not include.
+        weight: 2
+      - id: target_users
+        label: Target Users
+        description: Personas or segments this PRD serves.
+        weight: 2
+      - id: requirements
+        label: Functional Requirements
+        description: Numbered list of key capabilities with acceptance notes.
+        weight: 3
+      - id: success_metrics
+        label: Success Metrics
+        description: Quantitative measures to evaluate launch success.
+        weight: 2
+    optional_fields:
+      - id: risks
+        label: Risks & Mitigations
+        description: Material risks, blockers, and mitigation ideas.
+        weight: 1
+      - id: rollout_plan
+        label: Rollout Plan
+        description: Phased launch, guardrails, and communication notes.
+        weight: 1
+      - id: dependencies
+        label: Dependencies
+        description: Teams, services, or external factors we rely on.
+        weight: 1
+    diagnostic_questions:
+      - id: context
+        text: What problem are you solving and why now?
+        targets: [overview]
+      - id: goals
+        text: What top goals or outcomes must this initiative achieve?
+        targets: [goals]
+      - id: users
+        text: Who are the primary users or customers?
+        targets: [target_users]
+      - id: requirements
+        text: List the must-have capabilities and any key acceptance criteria.
+        targets: [requirements]
+      - id: success_metrics
+        text: How will you measure success after launch?
+        targets: [success_metrics]
+      - id: risks
+        text: What risks or constraints do you need to capture?
+        targets: [risks, non_goals]
+      - id: rollout
+        text: Do you have a rollout or launch plan in mind?
+        targets: [rollout_plan]
+      - id: dependencies
+        text: Are there dependencies on other teams, services, or timelines?
+        targets: [dependencies]
+    research_prompts:
+      - query: industry benchmarks for {topic} product success metrics
+        applies_to: [success_metrics]
+      - query: best practices for drafting PRD {industry}
+        applies_to: [overview, goals, requirements]
+
+  - id: tech_design
+    name: Technical Design Document
+    description: Captures how a solution will be implemented, including architecture and tradeoffs.
+    stage_hint: design
+    template: tech_design.md.hbs
+    required_fields:
+      - id: summary
+        label: Summary
+        description: High-level overview of the proposed solution.
+        weight: 3
+      - id: context
+        label: Context & Motivation
+        description: Background, problem statement, and constraints.
+        weight: 3
+      - id: architecture
+        label: Architecture Overview
+        description: System architecture, components, and interactions.
+        weight: 3
+      - id: detailed_design
+        label: Detailed Design
+        description: Component-level design, data models, APIs, and flows.
+        weight: 3
+      - id: tradeoffs
+        label: Risks & Tradeoffs
+        description: Key decisions, alternatives considered, and tradeoffs.
+        weight: 2
+      - id: testing
+        label: Testing & Validation
+        description: Test strategy, quality gates, and monitoring plan.
+        weight: 2
+    optional_fields:
+      - id: dependencies
+        label: Dependencies
+        description: Upstream services, libraries, teams, or timelines.
+        weight: 1
+      - id: rollout
+        label: Rollout Strategy
+        description: Deployment, migration, and rollback considerations.
+        weight: 1
+      - id: open_questions
+        label: Open Questions
+        description: Unresolved issues needing alignment.
+        weight: 1
+    diagnostic_questions:
+      - id: motivation
+        text: What is the background and problem this design addresses?
+        targets: [context]
+      - id: architecture
+        text: Describe the proposed architecture and main components.
+        targets: [architecture]
+      - id: detailed
+        text: How will each component work, including interfaces and data models?
+        targets: [detailed_design]
+      - id: tradeoffs
+        text: What alternatives did you consider and why choose this one?
+        targets: [tradeoffs]
+      - id: testing
+        text: How will you test, validate, and monitor this solution?
+        targets: [testing]
+      - id: dependencies
+        text: Are there dependencies or sequencing concerns?
+        targets: [dependencies]
+      - id: rollout
+        text: How do you plan to launch or migrate to this solution?
+        targets: [rollout]
+      - id: questions
+        text: List any open questions or areas needing more input.
+        targets: [open_questions]
+    research_prompts:
+      - query: reference architecture for {topic} systems
+        applies_to: [architecture, detailed_design]
+      - query: common risks when implementing {technology}
+        applies_to: [tradeoffs, testing]
+
+  - id: adr
+    name: Architecture Decision Record
+    description: Documents a single architectural decision, context, and consequences.
+    stage_hint: decision
+    template: adr.md.hbs
+    required_fields:
+      - id: context
+        label: Context
+        description: Essential background and forces impacting the decision.
+        weight: 3
+      - id: decision
+        label: Decision
+        description: The decision statement in a single sentence.
+        weight: 3
+      - id: status
+        label: Status
+        description: Proposed, accepted, deprecated, or superseded.
+        weight: 1
+      - id: consequences
+        label: Consequences
+        description: Positive and negative consequences of the decision.
+        weight: 2
+      - id: rationale
+        label: Rationale
+        description: Drivers, evaluations, and why this option was chosen.
+        weight: 2
+    optional_fields:
+      - id: alternatives
+        label: Alternatives Considered
+        description: Options that were evaluated and reasons rejected.
+        weight: 1
+      - id: related
+        label: Related Decisions / Links
+        description: Upstream/downstream decisions or references.
+        weight: 1
+    diagnostic_questions:
+      - id: context
+        text: Summarize the context and forces leading to this decision.
+        targets: [context]
+      - id: decision
+        text: What decision are you proposing or documenting?
+        targets: [decision]
+      - id: status
+        text: What is the status and effective date?
+        targets: [status]
+      - id: rationale
+        text: Why was this decision made; what evidence supports it?
+        targets: [rationale]
+      - id: consequences
+        text: What are the expected consequences, both positive and negative?
+        targets: [consequences]
+      - id: alternatives
+        text: Which alternatives were considered and why not chosen?
+        targets: [alternatives]
+      - id: related
+        text: Are there related decisions or references we should cite?
+        targets: [related]
+    research_prompts:
+      - query: pros and cons of {decision_topic}
+        applies_to: [consequences, rationale]
+      - query: alternatives to {decision_topic}
+        applies_to: [alternatives]

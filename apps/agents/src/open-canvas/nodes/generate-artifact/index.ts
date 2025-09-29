@@ -15,6 +15,7 @@ import {
 import { ARTIFACT_TOOL_SCHEMA } from "./schemas.js";
 import { createArtifactContent, formatNewArtifactPrompt } from "./utils.js";
 import { z } from "zod";
+import { maybeHandleDocSession } from "./docs-session.js";
 
 /**
  * Generate a new artifact based on the user's query.
@@ -23,6 +24,11 @@ export const generateArtifact = async (
   state: typeof OpenCanvasGraphAnnotation.State,
   config: LangGraphRunnableConfig
 ): Promise<OpenCanvasGraphReturnType> => {
+  const docSessionOutcome = await maybeHandleDocSession(state, config);
+  if (docSessionOutcome) {
+    return docSessionOutcome;
+  }
+
   const { modelName } = getModelConfig(config, {
     isToolCalling: true,
   });

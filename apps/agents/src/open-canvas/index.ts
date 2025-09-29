@@ -30,6 +30,7 @@ const routeNode = (state: typeof OpenCanvasGraphAnnotation.State) => {
 const cleanState = (_: typeof OpenCanvasGraphAnnotation.State) => {
   return {
     ...DEFAULT_INPUTS,
+    skipFollowup: undefined,
   };
 };
 

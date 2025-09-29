@@ -15,6 +15,7 @@ import {
   messagesStateReducer,
 } from "@langchain/langgraph";
 import { OC_SUMMARIZED_MESSAGE_KEY } from "@opencanvas/shared/constants";
+import { DocSessionState } from "../docs/types.js";
 
 export type Messages =
   | Array<BaseMessage | BaseMessageLike>
@@ -133,6 +134,8 @@ export const OpenCanvasGraphAnnotation = Annotation.Root({
    * The search results to include in context.
    */
   webSearchResults: Annotation<SearchResult[] | undefined>,
+  docsState: Annotation<DocSessionState | undefined>,
+  skipFollowup: Annotation<boolean | undefined>,
 });
 
 export type OpenCanvasGraphReturnType = Partial<

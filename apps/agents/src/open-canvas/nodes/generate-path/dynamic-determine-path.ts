@@ -59,9 +59,9 @@ async function dynamicDeterminePathFunc({
         : NO_ARTIFACT_PROMPT
     );
 
-  const artifactRoute = currentArtifactContent
-    ? "rewriteArtifact"
-    : "generateArtifact";
+  const routes = currentArtifactContent
+    ? (["replyToGeneralInput", "rewriteArtifact"] as const)
+    : (["replyToGeneralInput", "generateArtifact"] as const);
 
   const model = await getModelFromConfig(config, {
     temperature: 0,
@@ -69,9 +69,9 @@ async function dynamicDeterminePathFunc({
   });
 
   const schema = z.object({
-    route: z
-      .enum(["replyToGeneralInput", artifactRoute])
-      .describe("The route to take based on the user's query."),
+    route: z.enum(routes).describe(
+      "The route to take based on the user's query."
+    ),
   });
 
   const modelWithTool = model.bindTools(

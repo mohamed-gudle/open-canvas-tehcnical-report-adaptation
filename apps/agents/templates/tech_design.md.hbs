@@ -1,0 +1,43 @@
+# {{title}}
+
+## Summary
+{{summary}}
+
+## Context & Motivation
+{{context}}
+
+## Architecture Overview
+{{architecture}}
+
+## Detailed Design
+{{detailed_design}}
+
+## Risks & Tradeoffs
+{{tradeoffs}}
+
+## Testing & Validation
+{{testing}}
+
+{{#if dependencies}}
+## Dependencies
+{{dependencies}}
+{{/if}}
+
+{{#if rollout}}
+## Rollout Strategy
+{{rollout}}
+{{/if}}
+
+{{#if open_questions}}
+## Open Questions
+{{open_questions}}
+{{/if}}
+
+{{#if citations}}
+---
+
+## References
+{{#each citations}}
+- [{{this.label}}]({{this.url}}): {{this.note}}
+{{/each}}
+{{/if}}

@@ -225,7 +225,8 @@ export const ROUTE_QUERY_OPTIONS_HAS_ARTIFACTS = `
 
 export const ROUTE_QUERY_OPTIONS_NO_ARTIFACTS = `
 - 'generateArtifact': The user has inputted a request which requires generating an artifact.
-- 'replyToGeneralInput': The user submitted a general input which does not require making an update, edit or generating a new artifact. This should ONLY be used if you are ABSOLUTELY sure the user does NOT want to make an edit, update or generate a new artifact.`;
+- 'replyToGeneralInput': The user submitted a general input which does not require making an update, edit or generating a new artifact. This should ONLY be used if you are ABSOLUTELY sure the user does NOT want to make an edit, update or generate a new artifact.
+`;
 
 export const CURRENT_ARTIFACT_PROMPT = `This artifact is the one the user is currently viewing.
 <artifact>

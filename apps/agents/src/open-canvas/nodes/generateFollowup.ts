@@ -19,6 +19,12 @@ export const generateFollowup = async (
   state: typeof OpenCanvasGraphAnnotation.State,
   config: LangGraphRunnableConfig
 ): Promise<OpenCanvasGraphReturnType> => {
+  if (state.skipFollowup) {
+    return {
+      skipFollowup: undefined,
+    };
+  }
+
   const smallModel = await getModelFromConfig(config, {
     maxTokens: 250,
     // We say tool calling is true here because that'll cause it to use a small model
