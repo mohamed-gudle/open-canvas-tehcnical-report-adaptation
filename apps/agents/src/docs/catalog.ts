@@ -34,6 +34,8 @@ interface RawDocumentDefinition {
   description: string;
   stage_hint?: string;
   template: string;
+  pre_requisites_documents?: string;
+  document_template?: string;
   required_fields: RawRequirement[];
   optional_fields?: RawRequirement[];
   diagnostic_questions: RawQuestion[];
@@ -121,6 +123,8 @@ export async function loadDocumentCatalog(): Promise<Map<string, DocumentDefinit
       description: doc.description,
       stage_hint: doc.stage_hint,
       template: doc.template,
+      template_markdown: doc.document_template,
+      prerequisites: doc.pre_requisites_documents,
       required_fields: required,
       optional_fields: optional,
       diagnostic_questions: questions,

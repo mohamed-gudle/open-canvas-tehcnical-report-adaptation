@@ -25,6 +25,8 @@ export interface DocumentDefinition {
   description: string;
   stage_hint?: string;
   template: string;
+  template_markdown?: string;
+  prerequisites?: string;
   required_fields: RequirementSpec[];
   optional_fields: RequirementSpec[];
   diagnostic_questions: QuestionSpec[];

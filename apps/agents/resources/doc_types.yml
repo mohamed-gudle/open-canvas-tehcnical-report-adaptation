@@ -211,3 +211,1029 @@ doc_types:
         applies_to: [consequences, rationale]
       - query: alternatives to {decision_topic}
         applies_to: [alternatives]
+
+  - id: project_concept_note
+    name: Project Concept Note
+    description: Summarizes a development initiative for donor or stakeholder review with goals, approach, and resource needs.
+    stage_hint: concept
+    template: project_concept_note.md.hbs
+    pre_requisites_documents: |
+      - Policy documents
+      - Strategic plans
+      - Initial stakeholder input
+    document_template: |
+      # Project Concept Note Template
+
+      ## Project Overview
+
+      - **Project Title:**
+      - **Sector:** (e.g., Energy, Health, Agriculture, etc.)
+      - **Location:**
+      - **Duration:** (e.g., 24 months, Jan 2025 - Dec 2026)
+      - **Total Budget (USD):**
+      - **Implementing Organization:**
+      - **Partner Organizations:**
+      - **Target Beneficiaries:**
+
+      ## Background
+
+      Describe the current situation or challenge this project addresses. Include relevant data or context about the location, community, sector trends, and any previous related efforts. Explain the development need clearly.
+
+      ## Rationale & Justification
+
+      Explain why this project is necessary now. Highlight evidence of demand or urgency, gaps in current solutions, and alignment with development or policy goals. Make a compelling case for donor or investor interest.
+
+      ## Project Objectives
+
+      State the overall goal and 2-5 specific objectives. Objectives should be SMART: Specific, Measurable, Achievable, Relevant, and Time-bound.
+
+      **Example:**
+      - **Goal:** Improve access to renewable energy in underserved regions.
+      - **Objective 1:** Deploy solar microgrids in 10 villages.
+      - **Objective 2:** Train 100 local technicians in solar installation and maintenance.
+
+      ## Implementation Approach
+
+      Describe the main strategies, phases, or methods to be used. Highlight key activities, tools, innovations, stakeholder roles, and how the project will be implemented step by step.
+
+      **Example Structure:**
+      - Phase 1: Needs Assessment and Mobilization
+      - Phase 2: Deployment of Technologies
+      - Phase 3: Training and Capacity Building
+      - Phase 4: Monitoring and Handover
+
+      ## Expected Outcomes
+
+      List the outputs and outcomes (what will change as a result of the project). Include indicators where possible.
+
+      **Example:**
+      - 500 households with improved access to electricity
+      - 30% reduction in household fuel expenditure
+      - 20 youth certified in solar tech jobs
+
+      ## Project Timeline
+
+      Provide a high-level breakdown by month or quarter.
+
+      **Example:**
+
+      | Time Period     | Activity                                 |
+      |----------------|------------------------------------------|
+      | Months 1-3      | Baseline survey, community engagement    |
+      | Months 4-6      | Infrastructure installation              |
+      | Months 7-9      | Training workshops                       |
+      | Months 10-12    | Monitoring and final evaluation          |
+
+      ## Risk Analysis
+
+      Identify key risks and mitigation strategies.
+
+      **Example Table:**
+
+      | Risk                           | Impact     | Likelihood | Mitigation Strategy                          |
+      |--------------------------------|------------|------------|----------------------------------------------|
+      | Weather-related delays         | Medium     | High       | Adjust work schedule, buffer timelines       |
+      | Regulatory approval delays     | High       | Medium     | Early engagement with authorities            |
+      | Community resistance           | Medium     | Low        | Conduct FPIC, use local liaison officers     |
+
+      ## Budget Summary
+
+      Provide indicative cost breakdown (not detailed line items).
+
+      **Example:**
+
+      | Budget Item              | Amount (USD)   |
+      |--------------------------|----------------|
+      | Personnel & Consultants  | $200,000        |
+      | Equipment & Materials    | $500,000        |
+      | Training & Workshops     | $100,000        |
+      | Monitoring & Evaluation  | $50,000         |
+      | Admin & Overheads        | $75,000         |
+      | **Total**                | **$925,000**    |
+
+      ## Partners and Stakeholders
+
+      List the organizations involved and their roles.
+
+      **Example:**
+      - **XYZ Foundation (Lead Applicant):** Coordination, reporting
+      - **ABC Energy Ltd (Private Partner):** Technical deployment
+      - **Community Cooperative:** Local operations and maintenance
+      - **Local Government:** Policy support and permits
+
+      ## Additional Notes (Optional)
+
+      - Alignment with SDGs: (e.g., SDG 7 - Affordable and Clean Energy)
+      - Gender Inclusion Strategy: (e.g., 50% female trainee target)
+      - Monitoring & Evaluation Plan Summary: (tools, frequency, indicators)
+    required_fields:
+      - id: project_overview
+        label: Project Overview
+        description: Bullet summary with project title, sector, location, duration, total budget, implementing organization, partner organizations, and target beneficiaries.
+        weight: 3
+      - id: background
+        label: Background
+        description: Context and current situation motivating the project, including relevant data or prior efforts.
+        weight: 3
+      - id: rationale
+        label: Rationale & Justification
+        description: Why the project is needed now, urgency, demand evidence, and alignment with policy or donor priorities.
+        weight: 3
+      - id: project_objectives
+        label: Project Objectives
+        description: Overall goal plus 2-5 SMART objectives.
+        weight: 3
+      - id: implementation_approach
+        label: Implementation Approach
+        description: Phases, key activities, stakeholder roles, and delivery methods.
+        weight: 2
+      - id: expected_outcomes
+        label: Expected Outcomes
+        description: Outputs and outcomes with indicators or targets.
+        weight: 2
+      - id: project_timeline
+        label: Project Timeline
+        description: High-level schedule by month or quarter.
+        weight: 1
+      - id: risk_analysis
+        label: Risk Analysis
+        description: Key risks with impact, likelihood, and mitigation strategies.
+        weight: 2
+      - id: budget_summary
+        label: Budget Summary
+        description: Indicative cost breakdown by main categories with totals.
+        weight: 2
+      - id: partners_and_stakeholders
+        label: Partners and Stakeholders
+        description: Organizations involved and their roles or contributions.
+        weight: 1
+    optional_fields:
+      - id: additional_notes
+        label: Additional Notes
+        description: Alignment to SDGs, inclusion strategy, monitoring approach, or other remarks.
+        weight: 0.5
+    diagnostic_questions:
+      - id: concept_overview
+        text: Provide the key project overview details-title, sector, location, duration, budget, implementing and partner organizations, and target beneficiaries.
+        targets: [project_overview]
+      - id: concept_background
+        text: What background or situational context does this project respond to?
+        targets: [background]
+      - id: concept_rationale
+        text: Why is this project necessary now and how does it align with priority goals?
+        targets: [rationale]
+      - id: concept_objectives
+        text: What is the overall goal and the specific SMART objectives?
+        targets: [project_objectives]
+      - id: concept_approach
+        text: Outline the implementation approach, phases, and key activities.
+        targets: [implementation_approach]
+      - id: concept_outcomes
+        text: What outcomes or indicators should result from this project?
+        targets: [expected_outcomes]
+      - id: concept_timeline
+        text: Provide a high-level timeline or schedule for major activities.
+        targets: [project_timeline]
+      - id: concept_risks
+        text: List major risks with their impact, likelihood, and mitigations.
+        targets: [risk_analysis]
+      - id: concept_budget
+        text: Summarize the budget by major cost categories and totals.
+        targets: [budget_summary]
+      - id: concept_partners
+        text: Who are the partners and stakeholders and what are their roles?
+        targets: [partners_and_stakeholders]
+      - id: concept_notes
+        text: Are there additional notes such as SDG alignment or gender strategies to capture?
+        targets: [additional_notes]
+
+  - id: feasibility_study
+    name: Feasibility Study
+    description: Evaluates technical, financial, legal, environmental, and organizational viability of a proposed project.
+    stage_hint: feasibility
+    template: feasibility_study.md.hbs
+    pre_requisites_documents: |
+      - Technical data
+      - Market analysis
+      - Financial models
+    document_template: |
+      # Feasibility Study Co-Pilot Template
+
+      ## Executive Summary (Auto-generated Last)
+      - Project Name:
+      - Sector: (e.g. Energy, Real Estate, Agri, Infra)
+      - Location:
+      - Developer / Promoter:
+      - Overview: (Short project description)
+      - Key Findings:
+        - Technical Viability: Yes / No
+        - Financial Return: High / Med / Low
+        - Regulatory Risks: High / Med / Low
+        - Environmental Impact: Acceptable / Mitigation Needed / Critical
+      - Go / No-Go Decision: Pending / Recommend Go / Recommend Revise
+
+      ## Generation Phase: Core Discovery
+
+      ### Project Definition
+      - What is the primary product/service/output?
+      - What problem does it solve or opportunity does it address?
+      - Who are the primary beneficiaries/customers?
+      - **What is the scale and timeline?**
+      - **Is the business model clear? (yes/no)**
+
+      ### Market Context & Demand Drivers
+      - Target Market / Customer Segments:
+      - Market Size Estimate:
+      - Growth Trends (3-5 years):
+      - Competitor Landscape:
+      - Demand Evidence (letters, contracts, stats):
+
+      ## Technical Feasibility
+
+      ### Design & Engineering
+      - Core Technology / Infrastructure Description:
+      - Stage of Innovation (Prototype / Commercial / Unproven):
+      - Engineering Requirements / Specs:
+      - Site Readiness: (status for title, topography, access)
+      - Utilities: Power / Water / Internet: Available?
+      - Capacity Matching: Does the site match demand?
+
+      ### Delivery Model
+      - In-house / Outsourced / PPP:
+      - Key Equipment Needs:
+      - Vendor or EPC Shortlist:
+
+      **Refinement Checkpoints**:
+      - [ ] Design verified by qualified engineer
+      - [ ] Site visit completed
+      - [ ] Technology proven at required scale
+
+      ## Financial Feasibility
+
+      ### CAPEX / OPEX Summary
+      | Component       | Estimate (USD)  |
+      |----------------|-----------------|
+      | Land / Site     |                 |
+      | Construction    |                 |
+      | Equipment       |                 |
+      | Working Capital |                 |
+      | Total CAPEX     |                 |
+
+      ### Revenue Model
+      - Revenue Streams:
+      - Unit Pricing & Assumptions:
+      - Sales Volume Projections:
+      - Seasonality / Risk:
+
+      ### Financial Metrics (Projection Years: 5-20)
+      - Payback Period:
+      - IRR / NPV:
+      - Break-even Year:
+      - Sensitivity: (e.g., +10% cost, -10% price)
+
+      **Refinement Checkpoints**:
+      - [ ] Assumptions validated with industry data
+      - [ ] Exchange rates / inflation modeled
+      - [ ] Modeled using Excel or platform (link: ...)
+
+      ## Legal & Regulatory
+
+      ### Land & Tenure
+      - Land Ownership:
+      - Title Status:
+      - Encumbrances or Disputes:
+      - Indigenous or Community Rights:
+
+      ### Permits & Licenses
+      - Sector Licensing Authority:
+      - Environmental (EIA/EIS):
+      - Water, Energy, Health Safety:
+      - Local Authority Approvals:
+
+      **Refinement Checkpoints**:
+      - [ ] Legal due diligence completed
+      - [ ] Permit tracker in place
+      - [ ] No known legal disputes
+
+      ## Environmental & Social Feasibility (E&S)
+
+      ### Environmental Assessment
+      - Site Sensitivity (wetland, forest, protected area?):
+      - Waste / Emissions / Noise / Runoff:
+      - Required Study (EIA, ESIA, EMP, RAP):
+      - Biodiversity Impact:
+
+      ### Social Assessment
+      - Stakeholder Groups Identified:
+      - FPIC / LSC Conducted? Yes / No
+      - Resettlement / Displacement:
+      - Community Benefits:
+
+      **Refinement Checkpoints**:
+      - [ ] Scoping done with regulator
+      - [ ] FPIC or community protocol documented
+      - [ ] Mitigation plans costed
+
+      ## Organizational Feasibility
+
+      ### Sponsor / Developer
+      - Experience in Similar Projects:
+      - Legal Structure:
+      - Risk Appetite:
+      - ESG Credentials:
+
+      ### Implementation Team
+      - In-house vs outsourced team mix:
+      - Engineering / Legal / Finance capability:
+      - Roles clearly defined?
+
+      **Refinement Checkpoints**:
+      - [ ] Org chart finalized
+      - [ ] Governance framework documented
+      - [ ] Internal policies available (ESG, Anti-fraud, etc.)
+
+      ## Investment Readiness
+
+      - Investor Type Targeted: (Equity / Debt / Grant / PPP)
+      - Stage of Deal: Idea / Pre-FS / Bankable FS / FID
+      - Documents Ready:
+        - [ ] Teaser
+        - [ ] Financial Model
+        - [ ] Project Info Memo
+        - [ ] Risk Register
+        - [ ] E&S Summary
+
+      ## Risk Register
+
+      | Risk Category | Description | Severity | Mitigation |
+      |---------------|-------------|----------|-------------|
+      | Technical     |             | High     |             |
+      | Regulatory    |             | Medium   |             |
+      | Financial     |             | Low      |             |
+      | Social/ESG    |             | Medium   |             |
+
+      ## Refinement Phase Notes
+
+      - Gaps Identified:
+      - New Information Sources:
+      - Changes Made Since Last Iteration:
+      - Outstanding Issues / Open Questions:
+
+      ## Appendices
+
+      - A. Maps & Site Drawings
+      - B. CAPEX/OPEX Assumptions
+      - C. Stakeholder Matrix
+      - D. Regulatory Matrix
+      - E. Sensitivity Charts
+    required_fields:
+      - id: executive_summary
+        label: Executive Summary
+        description: Snapshot of the project, key findings, and provisional go/no-go view.
+        weight: 3
+      - id: project_definition
+        label: Project Definition
+        description: Product or service scope, problem statement, beneficiaries, scale, and timeline.
+        weight: 3
+      - id: market_context
+        label: Market Context & Demand Drivers
+        description: Target segments, market size, growth trends, competitive landscape, and demand evidence.
+        weight: 2
+      - id: design_engineering
+        label: Design & Engineering
+        description: Core technology, engineering requirements, site readiness, utilities, and capacity alignment.
+        weight: 2
+      - id: delivery_model
+        label: Delivery Model
+        description: Delivery approach, partners, equipment needs, and vendor considerations.
+        weight: 1
+      - id: capex_opex_summary
+        label: CAPEX / OPEX Summary
+        description: Cost breakdown for capital and operating expenditures.
+        weight: 2
+      - id: revenue_model
+        label: Revenue Model
+        description: Revenue streams, pricing assumptions, volume projections, and risk factors.
+        weight: 2
+      - id: financial_metrics
+        label: Financial Metrics
+        description: Payback period, IRR/NPV, break-even year, and sensitivities.
+        weight: 2
+      - id: land_tenure
+        label: Land & Tenure
+        description: Ownership, title status, encumbrances, and community rights.
+        weight: 1
+      - id: permits_licenses
+        label: Permits & Licenses
+        description: Regulatory requirements and current status.
+        weight: 1
+      - id: environmental_assessment
+        label: Environmental Assessment
+        description: Site sensitivity, impacts, required studies, and mitigation strategies.
+        weight: 2
+      - id: social_assessment
+        label: Social Assessment
+        description: Stakeholder groups, engagement status, displacement risks, and community benefits.
+        weight: 2
+      - id: organizational_feasibility
+        label: Organizational Feasibility
+        description: Sponsor experience, team capacity, governance, and policies.
+        weight: 1
+      - id: investment_readiness
+        label: Investment Readiness
+        description: Target investors, deal stage, and documents prepared.
+        weight: 1
+      - id: risk_register
+        label: Risk Register
+        description: Risks with severity levels and mitigation strategies.
+        weight: 2
+      - id: refinement_notes
+        label: Refinement Phase Notes
+        description: Gaps, new information sources, changes, and outstanding issues.
+        weight: 1
+    optional_fields:
+      - id: appendices_summary
+        label: Appendices Summary
+        description: Notes on supporting materials and references located in appendices.
+        weight: 0.5
+    diagnostic_questions:
+      - id: fs_exec
+        text: Summarize the feasibility study highlights including project name, sector, location, and key findings.
+        targets: [executive_summary]
+      - id: fs_definition
+        text: Define the project scope, product or service, beneficiaries, and timeline.
+        targets: [project_definition]
+      - id: fs_market
+        text: Describe the market context-target segments, size, growth, competitors, and demand evidence.
+        targets: [market_context]
+      - id: fs_design
+        text: Outline the technical design, engineering requirements, site readiness, and utilities.
+        targets: [design_engineering]
+      - id: fs_delivery
+        text: Explain the delivery model, partners, and equipment or vendor plans.
+        targets: [delivery_model]
+      - id: fs_costs
+        text: Provide the CAPEX and OPEX summary with major components and estimates.
+        targets: [capex_opex_summary]
+      - id: fs_revenue
+        text: Detail the revenue model, pricing assumptions, and demand projections.
+        targets: [revenue_model]
+      - id: fs_financials
+        text: Share the financial metrics-payback, IRR/NPV, break-even, and sensitivity checks.
+        targets: [financial_metrics]
+      - id: fs_land
+        text: What is the status of land ownership, title, and any community rights considerations?
+        targets: [land_tenure]
+      - id: fs_permits
+        text: Summarize the permits and licenses required and their current status.
+        targets: [permits_licenses]
+      - id: fs_environmental
+        text: Describe environmental considerations, potential impacts, and required studies.
+        targets: [environmental_assessment]
+      - id: fs_social
+        text: Summarize the social assessment, stakeholder engagement, and displacement or benefit issues.
+        targets: [social_assessment]
+      - id: fs_org
+        text: What demonstrates organizational capacity-sponsor experience, team skills, and governance?
+        targets: [organizational_feasibility]
+      - id: fs_investment
+        text: Outline investment readiness, target investors, deal stage, and prepared documents.
+        targets: [investment_readiness]
+      - id: fs_risks
+        text: Provide the risk register with categories, severity, and mitigation measures.
+        targets: [risk_register]
+      - id: fs_notes
+        text: Capture refinement notes, open issues, and recent changes since the last iteration.
+        targets: [refinement_notes]
+      - id: fs_appendices
+        text: Add any notes about appendices or supporting materials that should accompany the study.
+        targets: [appendices_summary]
+
+  - id: power_purchase_agreement
+    name: Power Purchase Agreement
+    description: Draft term sheet outlining parties, products, pricing, risk allocation, and legal terms for a PPA.
+    stage_hint: commercialization
+    template: power_purchase_agreement.md.hbs
+    pre_requisites_documents: |
+      - Draft term sheets
+      - Tariff structure proposals
+      - Interconnection agreements
+    document_template: |
+      # Power Purchase Agreement (PPA) Term Sheet
+
+      ## Parties & Project
+      **Buyer:** [Buyer Legal Name, Country]
+      **Seller / Developer:** [Developer Name, Country]
+      **Facility:** [Technology, e.g. Solar PV, Wind, BESS]
+      **Location:** [County, State/Region, Country]
+      **Nameplate Capacity:** [_MWAC/DC_]
+      **Commercial Operations Date (COD):** [Expected Date]
+      **Estimated Annual Output:** [_ MWh/year_]
+
+      ## Term, Extensions & Termination
+      **Term Duration:** [_e.g. 15 years from COD_]
+      **Renewal Options:** [_Optional extension terms_]
+      **Early Termination Events:** [_Breach_, _Force Majeure_, _Insolvency_, _Mutual Agreement_]
+
+      ## Products & Delivery
+      **Product Composition:**
+      - Delivered Energy (MWh)
+      - Environmental Attributes (e.g., RECs)
+      - Capacity & Ancillary Services (if applicable)
+      **Delivery Point:** [_Interconnection node or delivery point_]
+      **Performance Guarantees:**
+      - Availability (e.g. ≥ 85% first year, ≥ 90% thereafter)
+      - Liquidated damages / short‑fall penalties
+
+      ## Pricing & Payment Terms
+      **Price Structure:** [_Fixed_ $/MWh or $/kWh_]
+      **Escalator:** [_Annual escalation if any_]
+      **Payment Frequency:** [_Monthly based on delivered volume_]
+      **Incentives:** [_Environmental incentives or credits passed through_]
+
+      ## Metering & Measurement
+      **Meter Ownership & Maintenance:** [_Seller installs, Buyer or Seller maintains_]
+      **Reporting:** [_Monthly generation reports_]
+      **Data Access:** [_Real‑time or near real‑time monitoring if required_]
+
+      ## Regulatory & Environmental Compliance
+      **Permitting & Licensing:** Seller responsible to maintain all permits
+      **Environmental Attributes:** RECs and carbon credits transferred to Buyer monthly
+
+      ## Curtailment & Risk Allocation
+      **Curtailment Rights:** Buyer may curtail for system reliability
+      **Deemed Energy Compensation:** Seller compensated for curtailed energy, within agreed allowance
+      **Risk Sharing Model:** Unit-contingent vs. baseload model defined
+
+      ## Credit, Insurance & Financing
+      **Credit Support:** Letter of credit or parent company guarantee from Buyer if required
+      **Insurance Requirements:** Property damage, liability, business interruption coverage
+
+      ## Dispute Resolution & Governing Law
+      **Governing Law:** [Applicable jurisdiction]
+      **Dispute Steps:** Negotiation -> Mediation -> Arbitration / Court
+
+      ## Additional Provisions
+      - **Step‑in Rights / Transfer of Ownership** for lenders
+      - **Capacity Expansion Rights** for additional phases
+      - **Amendment Rights** linked to regulatory changes
+      - **Publicity & Confidentiality** clauses
+    required_fields:
+      - id: parties_project
+        label: Parties & Project
+        description: Buyer, seller, facility technology, location, capacity, COD, and expected output.
+        weight: 3
+      - id: term_extensions
+        label: Term, Extensions & Termination
+        description: Agreement term, renewal options, and termination events.
+        weight: 2
+      - id: products_delivery
+        label: Products & Delivery
+        description: Product scope, delivery point, performance guarantees, and penalties.
+        weight: 2
+      - id: pricing_payment
+        label: Pricing & Payment Terms
+        description: Price structure, escalators, payment frequency, and incentives.
+        weight: 2
+      - id: metering_measurement
+        label: Metering & Measurement
+        description: Meter ownership, maintenance responsibilities, reporting cadence, and data access.
+        weight: 1
+      - id: regulatory_compliance
+        label: Regulatory & Environmental Compliance
+        description: Permitting responsibilities and treatment of environmental attributes.
+        weight: 1
+      - id: curtailment_risk
+        label: Curtailment & Risk Allocation
+        description: Curtailment rights, deemed energy compensation, and risk sharing model.
+        weight: 1
+      - id: credit_insurance
+        label: Credit, Insurance & Financing
+        description: Credit support requirements and insurance obligations.
+        weight: 1
+      - id: dispute_resolution
+        label: Dispute Resolution & Governing Law
+        description: Governing law and dispute resolution process.
+        weight: 1
+    optional_fields:
+      - id: additional_provisions
+        label: Additional Provisions
+        description: Step-in rights, expansion options, amendment triggers, publicity, or confidentiality clauses.
+        weight: 0.5
+    diagnostic_questions:
+      - id: ppa_parties
+        text: Detail the buyer, seller, facility technology, location, capacity, COD, and expected output.
+        targets: [parties_project]
+      - id: ppa_term
+        text: Define the agreement term, renewal options, and termination events.
+        targets: [term_extensions]
+      - id: ppa_delivery
+        text: Summarize the product composition, delivery point, and performance guarantees.
+        targets: [products_delivery]
+      - id: ppa_pricing
+        text: Explain the pricing structure, escalators, payment cadence, and incentives.
+        targets: [pricing_payment]
+      - id: ppa_metering
+        text: Clarify metering responsibilities, reporting cadence, and data access expectations.
+        targets: [metering_measurement]
+      - id: ppa_regulatory
+        text: Outline regulatory compliance obligations and handling of environmental attributes.
+        targets: [regulatory_compliance]
+      - id: ppa_curtailment
+        text: Describe curtailment rights, compensation, and risk allocation.
+        targets: [curtailment_risk]
+      - id: ppa_credit
+        text: What credit support and insurance coverage are required?
+        targets: [credit_insurance]
+      - id: ppa_disputes
+        text: Specify governing law and the dispute resolution process.
+        targets: [dispute_resolution]
+      - id: ppa_additional
+        text: Capture any additional provisions such as step-in rights or publicity clauses.
+        targets: [additional_provisions]
+
+  - id: environmental_impact_assessment
+    name: Environmental Impact Assessment
+    description: Comprehensive report covering baseline conditions, impacts, mitigation, and monitoring for an EIA.
+    stage_hint: compliance
+    template: environmental_impact_assessment.md.hbs
+    pre_requisites_documents: |
+      - Baseline environmental data
+      - Risk identification reports
+      - Community engagement findings
+    document_template: |
+      # Environmental Impact Assessment (EIA) Report
+
+      ## Executive Summary
+      - Project Title
+      - Proponent: name, address, contact
+      - Project Location & Coordinates
+      - Project Description & Purpose
+      - Key Environmental Impacts
+      - Proposed Mitigation Measures
+      - Summary of Consultation Outcomes
+
+      ## Project Description
+      - Scope & Nature of Project
+      - Construction, Operational & Decommissioning Activities
+      - Timelines & Phasing
+      - Layout Plans / Maps / Design Diagrams
+      - Resource Requirements (land, water, energy, materials)
+
+      ## Legal & Institutional Framework
+      - Applicable Laws & Regulations (e.g. EMCA 1999, EIA/Audit Regs 2003/2019 in Kenya) :contentReference[oaicite:2]{index=2}
+      - Environmental Standards, International Conventions & Sector Guidelines
+      - Permits / Licences Required & Status
+
+      ## Baseline Environmental & Socio‑economic Conditions
+      - Physical Environment: topography, geology, soils, water
+      - Climate & Air Quality
+      - Biological Environment: biodiversity, habitats
+      - Socio-economic Context: population, land use, cultural and heritage sites
+      - Environmental Sensitivity Mapping
+
+      ## Stakeholder Engagement
+      - List of Interested & Affected Parties (I&APs)
+      - Means and Dates of Consultation
+      - Issues Raised & Responses
+      - Meeting / Upload Documentation Record
+
+      ## Impact Identification & Evaluation
+      - Methodology: matrices, RIAM, expert judgment :contentReference[oaicite:3]{index=3}
+      - Identification of Potential Effects (positive/negative) during project phases
+      - Impact Magnitude & Likelihood Assessment
+      - Significance of Impacts (scale, duration, reversibility)
+
+      ## Mitigation Measures & Environmental Management Plan (EMP)
+      - Mitigation Actions for Each Significant Impact
+      - Implementation Responsibility & Timing
+      - Monitoring Indicators, Frequency, Reporting Procedures
+      - Budget Estimation
+      - Adaptive Management & Contingency Actions
+
+      ## Alternatives Analysis
+      - No‑project Alternative
+      - Site, Design & Technology Alternatives
+      - Comparative Assessment & Rationale for Selected Option
+
+      ## Environmental Monitoring & Auditing
+      - Monitoring Plan against EMP
+      - Audit Frequency, Internal & Third-Party Roles
+      - Performance Indicators & Thresholds
+      - Corrective Measures & Reporting Protocol
+
+      ## Decommissioning & Closure Strategy
+      - Scheduled Activities & Timeline
+      - Rehabilitation & Landscape Restoration
+      - Institutional Arrangements
+
+      ## Conclusions & Recommendations
+      - Key Findings Summary
+      - Decision-Making Summary & Recommended Actions
+      - Summary of Residual Impacts Post-Mitigation
+
+      ## Appendices
+      - Terms of Reference (ToR) & Scoping Documentation
+      - Specialist Study Reports (e.g. ecology, hydrology, air quality)
+      - Public Consultation Log
+      - Technical Drawings, Maps & Tables
+      - Acronyms & Glossary
+      - References & Citations
+    required_fields:
+      - id: executive_summary
+        label: Executive Summary
+        description: Project overview, proponent, location, key impacts, mitigation, and consultation summary.
+        weight: 3
+      - id: project_description
+        label: Project Description
+        description: Scope, phases, activities, timelines, layouts, and resource requirements.
+        weight: 3
+      - id: legal_framework
+        label: Legal & Institutional Framework
+        description: Applicable laws, standards, permits, and responsible authorities.
+        weight: 2
+      - id: baseline_conditions
+        label: Baseline Environmental & Socio-economic Conditions
+        description: Physical, biological, and socio-economic baseline data plus sensitivity mapping.
+        weight: 3
+      - id: stakeholder_engagement
+        label: Stakeholder Engagement
+        description: Interested parties, consultation methods, issues raised, and responses.
+        weight: 2
+      - id: impact_evaluation
+        label: Impact Identification & Evaluation
+        description: Potential effects, magnitude, likelihood, and significance across project phases.
+        weight: 3
+      - id: mitigation_plan
+        label: Mitigation Measures & EMP
+        description: Mitigation actions, responsibilities, monitoring indicators, and budgets.
+        weight: 2
+      - id: alternatives_analysis
+        label: Alternatives Analysis
+        description: No-project, site, design, and technology alternatives with rationale for selection.
+        weight: 1
+      - id: monitoring_plan
+        label: Environmental Monitoring & Auditing
+        description: Monitoring program, audit schedules, indicators, and corrective measures.
+        weight: 1
+      - id: decommissioning_plan
+        label: Decommissioning & Closure Strategy
+        description: Decommissioning activities, timelines, and rehabilitation plans.
+        weight: 1
+      - id: conclusions
+        label: Conclusions & Recommendations
+        description: Key findings, decision summary, and residual impacts after mitigation.
+        weight: 1
+    optional_fields:
+      - id: appendices_summary
+        label: Appendices
+        description: Notes on supplemental studies, consultation logs, drawings, or references.
+        weight: 0.5
+    diagnostic_questions:
+      - id: eia_executive
+        text: Summarize the project, proponent, location, key impacts, mitigation, consultations, and recommendations for the executive summary.
+        targets: [executive_summary]
+      - id: eia_description
+        text: Describe the project scope, phases, activities, timelines, and resource needs.
+        targets: [project_description]
+      - id: eia_legal
+        text: List applicable laws, standards, permits, and responsible institutions.
+        targets: [legal_framework]
+      - id: eia_baseline
+        text: Provide baseline environmental and socio-economic conditions and sensitivity mapping.
+        targets: [baseline_conditions]
+      - id: eia_engagement
+        text: Who was consulted, how, when, and what issues were raised?
+        targets: [stakeholder_engagement]
+      - id: eia_impacts
+        text: Identify potential impacts, their magnitude, likelihood, and significance.
+        targets: [impact_evaluation]
+      - id: eia_mitigation
+        text: Detail mitigation measures, responsibilities, monitoring indicators, and budgets.
+        targets: [mitigation_plan]
+      - id: eia_alternatives
+        text: Evaluate alternatives considered and justify the preferred option.
+        targets: [alternatives_analysis]
+      - id: eia_monitoring
+        text: Outline the monitoring and auditing plan with indicators and corrective measures.
+        targets: [monitoring_plan]
+      - id: eia_decommissioning
+        text: Explain the decommissioning and closure strategy with rehabilitation measures.
+        targets: [decommissioning_plan]
+      - id: eia_conclusions
+        text: Provide conclusions, decisions, and residual impacts after mitigation.
+        targets: [conclusions]
+      - id: eia_appendices
+        text: Note any appendices or supporting studies to reference.
+        targets: [appendices_summary]
+
+  - id: free_prior_informed_consent
+    name: Free, Prior and Informed Consent
+    description: Documents FPIC/LSC process, engagement protocols, consent outcomes, and monitoring commitments.
+    stage_hint: engagement
+    template: free_prior_informed_consent.md.hbs
+    pre_requisites_documents: |
+      - Community maps
+      - Cultural heritage assessments
+      - Records of consultations
+    document_template: |
+      # FPIC / LSC Documentation Template
+
+      ## Stakeholder Mapping
+
+      **Objective:** Identify all Indigenous Peoples, local communities, and stakeholders impacted or interested in the project.
+
+      **Instructions:**
+      - Map affected parties (e.g., villages, landowners, user groups).
+      - Note vulnerable subgroups (women, youth, elders).
+      - List formal and customary decision-making structures.
+
+      **Example Table:**
+
+      | Stakeholder Group | Type | Proximity | Vulnerabilities | Representation |
+      |-------------------|------|-----------|------------------|----------------|
+      | Village A         | Indigenous | Adjacent to site | Elderly/Youth | Council of Elders |
+      | Women's Group B   | Community Org | Within 5 km | Limited access to formal meetings | Chairwoman + 2 reps |
+
+      ## Legal & Policy Framework
+
+      **Objective:** Define the legal and voluntary standards governing the consultation process.
+
+      **Instructions:**
+      - List national FPIC laws or Indigenous rights provisions.
+      - Reference international frameworks (UNDRIP, ILO 169, IFC PS7).
+      - Include any voluntary commitments (RSPO, FSC, ICMM, etc.).
+
+      **Example:**
+      - UNDRIP Article 32.2 - Obligation to obtain FPIC before approval of projects.
+      - ILO 169 Article 6 - Obligation to consult in good faith.
+      - Kenya Constitution (Article 63) - Recognition of community land rights.
+
+      ## Engagement Protocols
+
+      **Objective:** Describe how engagement will be conducted.
+
+      **Instructions:**
+      - Use culturally appropriate communication and meeting methods.
+      - Ensure inclusion of women, youth, and persons with disabilities.
+      - Define timing, language, and format for consultations.
+
+      **Checklist:**
+      - [ ] Local language translations provided
+      - [ ] Female facilitators for women-only groups
+      - [ ] Written and oral options for low-literacy stakeholders
+
+      ## FPIC Process Steps
+
+      **Objective:** Document each step of the Free, Prior, and Informed Consent process.
+
+      ### Step 1: Pre-Consultation
+      - Agree on process design with community leaders.
+      - Define how consent will be given (e.g., public resolution, elders' vote).
+
+      ### Step 2: Information Disclosure
+      - Provide project details, risks, ESIA summaries in accessible formats.
+      - Allow for time to review independently.
+
+      ### Step 3: Community Consultation
+      - Hold inclusive and repeated meetings.
+      - Allow time for internal deliberation without external pressure.
+
+      ### Step 4: Consent Outcome
+      - Record the final decision:
+        - Consent given (mark Yes), withheld (mark No), or conditional (note conditions)
+      - Attach meeting minutes, signed statements, or declarations.
+
+      ## Local Stakeholder Consultation (LSC)
+
+      **Objective:** Capture broader community engagement beyond Indigenous groups.
+
+      **Instructions:**
+      - List meetings held, participants, and issues raised.
+      - Highlight changes to project design based on feedback.
+
+      **Table Example:**
+
+      | Date | Location | Stakeholders | Key Issues Raised | Outcome |
+      |------|----------|--------------|-------------------|---------|
+      | Jan 5 | Village Hall | 40 residents | Dust concerns, job access | Dust suppression added |
+
+      ## Grievance Mechanism
+
+      **Objective:** Provide stakeholders a way to raise concerns and get redress.
+
+      **Instructions:**
+      - Ensure the mechanism is free, accessible, and culturally appropriate.
+      - Provide multiple channels: phone, in-person, suggestion box, WhatsApp.
+
+      **Table Example:**
+
+      | Date | Complainant (anonymized) | Issue | Response | Status |
+      |------|---------------------------|-------|----------|--------|
+      | Feb 2 | Resident, Village A | Excess noise | Work hours adjusted | Resolved |
+
+      ## Consent Documentation
+
+      **Objective:** Record the final consent decision clearly and legally.
+
+      **Include:**
+      - Consent letter or signed MoU
+      - Date, location, signatories
+      - Conditions of consent (if any)
+      - Statement confirming process was free, prior, informed
+
+      **Example Statement:**
+
+      > "We, the [Community Name], hereby declare our Free, Prior and Informed Consent (FPIC) for the [Project Name], provided that [conditions]. This consent is given voluntarily, based on full disclosure, and before implementation."
+
+      ## Monitoring and Follow-Up
+
+      **Objective:** Ensure long-term engagement and fulfillment of obligations.
+
+      **Checklist:**
+      - [ ] Community monitoring committee established
+      - [ ] Quarterly follow-up meetings scheduled
+      - [ ] Benefit-sharing tracked and reported
+      - [ ] Re-consent required for any major project changes
+
+      **Reporting Template:**
+
+      | Indicator | Frequency | Responsible | Notes |
+      |-----------|-----------|-------------|-------|
+      | Jobs for locals | Monthly | Site HR Officer | Updated at community forums |
+      | Water Quality | Quarterly | Environmental Manager + community rep | Reports shared publicly |
+
+      ## Appendices
+
+      - A: Stakeholder list and maps
+      - B: Consultation materials (slides, handouts, posters)
+      - C: Signed consent documents
+      - D: Meeting minutes
+      - E: Grievance Log (anonymized)
+      - F: Benefit-Sharing Agreement (if applicable)
+    required_fields:
+      - id: stakeholder_mapping
+        label: Stakeholder Mapping
+        description: Indigenous and local groups, vulnerabilities, and representation structures.
+        weight: 3
+      - id: legal_policy_framework
+        label: Legal & Policy Framework
+        description: National laws, international standards, and voluntary commitments guiding FPIC.
+        weight: 2
+      - id: engagement_protocols
+        label: Engagement Protocols
+        description: Communication methods, inclusion measures, languages, timing, and facilitation approaches.
+        weight: 2
+      - id: fpic_process
+        label: FPIC Process Steps
+        description: Activities across pre-consultation, information disclosure, consultations, and consent outcome.
+        weight: 3
+      - id: lsc_summary
+        label: Local Stakeholder Consultation Summary
+        description: Meetings held, participants, issues raised, and resulting adjustments.
+        weight: 2
+      - id: grievance_mechanism
+        label: Grievance Mechanism
+        description: Channels available, accessibility measures, and tracking for grievances.
+        weight: 1
+      - id: consent_documentation
+        label: Consent Documentation
+        description: Consent decision, conditions, signatories, and confirmation of FPIC principles.
+        weight: 2
+      - id: monitoring_follow_up
+        label: Monitoring and Follow-Up
+        description: Commitments for ongoing engagement, benefit sharing, and indicators.
+        weight: 1
+    optional_fields:
+      - id: appendices
+        label: Appendices
+        description: Supporting materials such as maps, consultation materials, agreements, or logs.
+        weight: 0.5
+    diagnostic_questions:
+      - id: fpic_stakeholders
+        text: Map the stakeholders involved, including vulnerable groups and representation structures.
+        targets: [stakeholder_mapping]
+      - id: fpic_legal
+        text: Outline the legal and policy frameworks guiding the FPIC or consultation process.
+        targets: [legal_policy_framework]
+      - id: fpic_protocols
+        text: Describe the engagement protocols, languages, accessibility measures, and facilitation plans.
+        targets: [engagement_protocols]
+      - id: fpic_process
+        text: Walk through the FPIC steps from pre-consultation to consent outcomes.
+        targets: [fpic_process]
+      - id: fpic_lsc
+        text: Summarize local stakeholder consultations, participants, issues raised, and outcomes.
+        targets: [lsc_summary]
+      - id: fpic_grievance
+        text: Document the grievance mechanism channels and tracking approach.
+        targets: [grievance_mechanism]
+      - id: fpic_consent
+        text: Record the consent decision, conditions, signatories, and confirmation that the process was free, prior, and informed.
+        targets: [consent_documentation]
+      - id: fpic_monitoring
+        text: Describe monitoring and follow-up commitments, indicators, and responsibilities.
+        targets: [monitoring_follow_up]
+      - id: fpic_appendices
+        text: Note any appendices or supporting materials to include.
+        targets: [appendices]

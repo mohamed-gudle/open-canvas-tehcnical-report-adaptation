@@ -1,0 +1,42 @@
+# {{title}}
+
+## Parties & Project
+{{parties_project}}
+
+## Term, Extensions & Termination
+{{term_extensions}}
+
+## Products & Delivery
+{{products_delivery}}
+
+## Pricing & Payment Terms
+{{pricing_payment}}
+
+## Metering & Measurement
+{{metering_measurement}}
+
+## Regulatory & Environmental Compliance
+{{regulatory_compliance}}
+
+## Curtailment & Risk Allocation
+{{curtailment_risk}}
+
+## Credit, Insurance & Financing
+{{credit_insurance}}
+
+## Dispute Resolution & Governing Law
+{{dispute_resolution}}
+
+{{#if additional_provisions}}
+## Additional Provisions
+{{additional_provisions}}
+{{/if}}
+
+{{#if citations}}
+---
+
+## References
+{{#each citations}}
+- [{{this.label}}]({{this.url}}): {{this.note}}
+{{/each}}
+{{/if}}
