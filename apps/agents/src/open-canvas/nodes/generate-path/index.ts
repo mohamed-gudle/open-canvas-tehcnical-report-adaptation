@@ -12,6 +12,7 @@ import {
 } from "./documents.js";
 import { getStringFromContent } from ".././../../utils.js";
 import { includeURLContents } from "./include-url-contents.js";
+import { createDocSession } from "../../../docs/session.js";
 
 function extractURLsFromLastMessage(messages: BaseMessage[]): string[] {
   const recentMessage = messages[messages.length - 1];
@@ -161,8 +162,14 @@ export async function generatePath(
         _messages: newInternalMessageList,
       };
 
-  return {
+  const updates: OpenCanvasGraphReturnType = {
     next: route,
     ...messages,
   };
+
+  if (!state.docsState?.active && routingResult?.docDefinition) {
+    updates.docsState = createDocSession(routingResult.docDefinition);
+  }
+
+  return updates;
 }

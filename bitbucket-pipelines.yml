@@ -1,0 +1,68 @@
+image: node:22
+
+clone:
+    depth: full
+
+pipelines:
+    branches:
+        main:
+            - step:
+                  name: Build & Deploy Web (Docker)
+                  caches:
+                      - node
+                  script:
+                      - npm i -g @railway/cli
+                      - RAILWAY_TOKEN=$RAILWAY_TOKEN railway up --service=$RAILWAY_WEB_SERVICE
+                      - railway logout
+                  condition:
+                      changesets:
+                          includePaths:
+                              - 'apps/web/**'
+                              - 'packages/**'
+                              - 'bitbucket-pipelines.yml'
+
+            - step:
+                  name: Build & Deploy Agent (Docker)
+                  caches:
+                      - node
+                  script:
+                      - npm i -g @railway/cli
+                      - RAILWAY_TOKEN=$RAILWAY_TOKEN railway up --service=$RAILWAY_API_SERVICE
+                      - railway logout
+                  condition:
+                      changesets:
+                          includePaths:
+                              - 'apps/agents/**'
+                              - 'packages/**'
+                              - 'bitbucket-pipelines.yml'
+
+        staging:
+            - step:
+                  name: Build & Deploy Web (Docker - staging)
+                  caches:
+                      - node
+                  script:
+                      - npm i -g @railway/cli
+                      - RAILWAY_TOKEN=$RAILWAY_TOKEN railway up --service=$RAILWAY_WEB_SERVICE_STAGING
+                      - railway logout
+                  condition:
+                      changesets:
+                          includePaths:
+                              - 'apps/web/**'
+                              - 'packages/**'
+                              - 'bitbucket-pipelines.yml'
+
+            - step:
+                  name: Build & Deploy API (Docker - staging)
+                  caches:
+                      - node
+                  script:
+                      - npm i -g @railway/cli
+                      - RAILWAY_TOKEN=$RAILWAY_TOKEN railway up --service=$RAILWAY_API_SERVICE_STAGING
+                      - railway logout
+                  condition:
+                      changesets:
+                          includePaths:
+                              - 'apps/api/**'
+                              - 'packages/**'
+                              - 'bitbucket-pipelines.yml'

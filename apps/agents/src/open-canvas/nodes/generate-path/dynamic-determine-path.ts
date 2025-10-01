@@ -16,11 +16,18 @@ import { getArtifactContent } from "@opencanvas/shared/utils/artifacts";
 import z from "zod";
 import { BaseMessage } from "@langchain/core/messages";
 import { traceable } from "langsmith/traceable";
+import { resolveDocumentDefinition } from "../../../docs/intent.js";
+import { DocumentDefinition } from "../../../docs/types.js";
 
 interface DynamicDeterminePathParams {
   state: typeof OpenCanvasGraphAnnotation.State;
   newMessages: BaseMessage[];
   config: LangGraphRunnableConfig;
+}
+
+interface RoutingDecision {
+  route: "replyToGeneralInput" | "generateArtifact" | "rewriteArtifact";
+  docDefinition?: DocumentDefinition;
 }
 
 /**
@@ -30,7 +37,28 @@ async function dynamicDeterminePathFunc({
   state,
   newMessages,
   config,
-}: DynamicDeterminePathParams) {
+}: DynamicDeterminePathParams): Promise<RoutingDecision | undefined> {
+  const docSession = state.docsState;
+  const candidateMessages = newMessages.length
+    ? ([...state._messages, ...newMessages] as BaseMessage[])
+    : (state._messages as BaseMessage[]);
+
+  if (!docSession?.active) {
+    const inferredDefinition = await resolveDocumentDefinition({
+      config,
+      messages: candidateMessages,
+      fallbackToDefault: false,
+    });
+    if (inferredDefinition) {
+      return {
+        route: "replyToGeneralInput",
+        docDefinition: inferredDefinition,
+      } satisfies RoutingDecision;
+    }
+  } else if (!docSession.readyToGenerate) {
+    return { route: "replyToGeneralInput" } satisfies RoutingDecision;
+  }
+
   const currentArtifactContent = state.artifact
     ? getArtifactContent(state.artifact)
     : undefined;
@@ -58,6 +86,14 @@ async function dynamicDeterminePathFunc({
           )
         : NO_ARTIFACT_PROMPT
     );
+
+  const docRoutingHint = docSession?.readyToGenerate
+    ? "A documentation drafting session is ready. If the user clearly requests drafting now, routing to generateArtifact is appropriate; otherwise, continue the dialog."
+    : "";
+
+  const promptWithDocs = docRoutingHint
+    ? `${formattedPrompt}\n\n<doc-session-hint>\n${docRoutingHint}\n</doc-session-hint>`
+    : formattedPrompt;
 
   const routes = currentArtifactContent
     ? (["replyToGeneralInput", "rewriteArtifact"] as const)
@@ -93,11 +129,16 @@ async function dynamicDeterminePathFunc({
     ...(newMessages.length ? newMessages : []),
     {
       role: "user",
-      content: formattedPrompt,
+      content: promptWithDocs,
     },
   ]);
 
-  return result.tool_calls?.[0]?.args as z.infer<typeof schema> | undefined;
+  const args = result.tool_calls?.[0]?.args as z.infer<typeof schema> | undefined;
+  if (!args) {
+    return undefined;
+  }
+
+  return { route: args.route } satisfies RoutingDecision;
 }
 
 export const dynamicDeterminePath = traceable(dynamicDeterminePathFunc, {
