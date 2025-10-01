@@ -29,6 +29,8 @@ export function createDocSession(definition: DocumentDefinition): DocSessionStat
     title: `${definition.name} Draft`,
     processedMessageIds: [],
     lastAskedQuestionId: undefined,
+    assumptionNote: undefined,
+    assumedFieldIds: [],
   };
 }
 

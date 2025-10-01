@@ -77,4 +77,6 @@ export interface DocSessionState {
   title: string;
   processedMessageIds: string[];
   lastAskedQuestionId?: string;
+  assumptionNote?: string;
+  assumedFieldIds?: string[];
 }

@@ -89,12 +89,27 @@ function buildDocSessionContext(session: DocSessionState): string | undefined {
         .join("\n")
     : "No additional project or user metadata was provided.";
 
+  const assumptionSummary = session.assumptionNote
+    ? (() => {
+        const assumedLabels = (session.assumedFieldIds ?? [])
+          .map((fieldId) => getFieldLabel(fieldId))
+          .filter((label, index, array) => label && array.indexOf(label) === index);
+        const assumedList = assumedLabels.length
+          ? assumedLabels.map((label) => `- ${label}`).join("\n")
+          : "- (applied broadly to unspecified sections)";
+        return `User assumption instruction:\n${session.assumptionNote}\n\nSections covered by assumption:\n${assumedList}`;
+      })()
+    : undefined;
+
   return [
     `Context collected during planning for the ${definition.name}:`,
     `<doc-answers>\n${answerSummary}\n</doc-answers>`,
     `Additional details:\n<doc-dossier>\n${dossierSummary}\n</doc-dossier>`,
     `Confidence estimate before drafting: ${session.confidence}%.`,
-  ].join("\n\n");
+    assumptionSummary,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 /**

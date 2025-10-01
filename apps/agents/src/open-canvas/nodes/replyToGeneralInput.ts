@@ -29,6 +29,14 @@ const READY_PATTERNS = [
   /we['’]?re ready/i,
 ];
 
+const ASSUME_PATTERNS = [
+  /\byou can assume\b/i,
+  /\bplease assume\b/i,
+  /\b(?:let['’]?s|lets) assume\b/i,
+  /\bassume (?:the )?(?:rest|remaining|others|missing|details)/i,
+  /\bassume .* (?:for|about) (?:any|the) (?:missing|remaining)/i,
+];
+
 interface ProjectUserDetails {
   project?: unknown;
   user?: unknown;
@@ -182,6 +190,18 @@ function detectReadyIntent(text: string): boolean {
   return READY_PATTERNS.some((pattern) => pattern.test(text));
 }
 
+function detectAssumeInstruction(text: string): boolean {
+  if (!text.trim()) {
+    return false;
+  }
+
+  if (/\b(?:don['’]?t|do not|cannot|can't) assume\b/i.test(text)) {
+    return false;
+  }
+
+  return ASSUME_PATTERNS.some((pattern) => pattern.test(text));
+}
+
 function getFieldLabel(session: DocSessionState, fieldId: string): string {
   const { definition } = session;
   const required = definition.required_fields.find((field) => field.id === fieldId);
@@ -252,6 +272,52 @@ function processDocSessionMessages(
 
   const readyIntent = detectReadyIntent(trimmedContent);
 
+  const assumeInstruction = detectAssumeInstruction(trimmedContent);
+  if (assumeInstruction) {
+    const timestamp = Date.now();
+    const updatedAnswers = { ...updatedSession.answers };
+    const assumedIdentifiers = new Set(updatedSession.assumedFieldIds ?? []);
+    const assumptionValue = `Assumed per user instruction: ${trimmedContent}`;
+
+    const allFields = [
+      ...updatedSession.definition.required_fields,
+      ...updatedSession.definition.optional_fields,
+    ];
+
+    allFields.forEach((field) => {
+      const existingValue = updatedAnswers[field.id]?.value?.trim();
+      if (existingValue) {
+        return;
+      }
+
+      const record: AnswerRecord = {
+        fieldId: field.id,
+        value: assumptionValue,
+        source: "assumption",
+        confidence: 0.4,
+        timestamps: [timestamp],
+      };
+      updatedAnswers[field.id] = record;
+      assumedIdentifiers.add(field.id);
+    });
+
+    const confidence = calculateCoverageConfidence(
+      updatedSession.definition,
+      updatedAnswers
+    );
+
+    return {
+      ...updatedSession,
+      answers: updatedAnswers,
+      pendingQuestions: [],
+      confidence,
+      readyToGenerate: true,
+      lastAskedQuestionId: undefined,
+      assumptionNote: trimmedContent,
+      assumedFieldIds: Array.from(assumedIdentifiers),
+    };
+  }
+
   if (updatedSession.lastAskedQuestionId) {
     const targetQuestion = updatedSession.pendingQuestions.find(
       (question) => question.id === updatedSession.lastAskedQuestionId
@@ -287,6 +353,10 @@ function processDocSessionMessages(
       const readyToGenerate =
         confidence >= 75 || remainingQuestions.length === 0;
 
+      const assumedFieldIds = (updatedSession.assumedFieldIds ?? []).filter(
+        (fieldId) => !targetQuestion.targets.includes(fieldId)
+      );
+
       updatedSession = {
         ...updatedSession,
         answers: updatedAnswers,
@@ -294,6 +364,7 @@ function processDocSessionMessages(
         confidence,
         readyToGenerate,
         lastAskedQuestionId: undefined,
+        assumedFieldIds,
       };
     } else {
       updatedSession = {
@@ -343,10 +414,14 @@ function buildDocPrompt(
       ? "Prompt the user to supply a JSON string with `project` and `user` keys if it has not been provided."
       : "Reference the structured JSON details when relevant.";
   const readinessGuide = session.readyToGenerate
-    ? "The user has enough context to draft. If they explicitly ask, confirm readiness to begin drafting."
+    ? session.assumptionNote
+      ? "The user instructed you to assume missing details. Confirm readiness to draft without requesting further inputs."
+      : "The user has enough context to draft. If they explicitly ask, confirm readiness to begin drafting."
     : "Do NOT begin drafting yet. Continue gathering context for the document.";
   const questionGuide = nextQuestion
     ? `End your reply by asking: ${nextQuestion.text}`
+    : session.assumptionNote
+    ? "The user asked you to assume any remaining details. Acknowledge their instruction, avoid new diagnostic questions, and let them know you are ready to begin drafting whenever they confirm."
     : "If the user is satisfied with the context collected, confirm whether they'd like you to begin drafting now.";
 
   return [
